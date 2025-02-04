@@ -1,86 +1,111 @@
-import { Button } from "@/components/ui/button"
-import { SiteHeader } from "@/components/site-header"
-import { Card } from "@/components/ui/card"
-import { Brain, Salad, Target, Sparkles } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { SiteHeader } from "@/components/site-header";
+import { Card } from "@/components/ui/card";
+import { Brain, Salad, Target, Sparkles } from "lucide-react";
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen w-full flex-col dark">
-      <SiteHeader />
+	return (
+		<div className="flex min-h-screen w-full flex-col dark">
+		
 
-      {/* Hero Section */}
-      <section className="relative">
-        <div className="container flex flex-col items-start justify-center space-y-8 py-32 md:py-40">
-          <div className=" w-1/2 mr-0 ml-auto space-y-4">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-              Transform Your Body
-              <span className="text-primary"> With AI-Powered Nutrition</span>
-            </h1>
-            <p className="text-muted-foreground md:text-xl">
-              Get personalized meal plans that adapt to your goals, preferences, and dietary needs. Backed by science,
-              powered by AI.
-            </p>
-            <div className="space-x-4 pt-4">
-              <Button size="lg">Start Your Journey</Button>
-              <Button variant="outline" size="lg">
-                Learn More
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div
-          className="absolute inset-0 -z-10 bg-[url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Desktop-14.jpg-hOIclkEor581LWxfOPHcg3TfrnID9A.jpeg')] bg-cover bg-center bg-no-repeat"
-          style={{
-            maskImage: "linear-gradient(to right, black 40%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to right, black 40%, transparent 100%)",
-          }}
-        />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background/80 to-background/20" />
-      </section>
+			{/* Hero Section */}
+			<section className="relative">
+				<div className=" flex flex-col items-start justify-center space-y-8 py-32 md:py-40">
+					<div className=" w-1/2 mr-0 ml-auto space-y-4">
+						<h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+							Transform Your Body
+							<span className="text-primary">
+								{" "}
+								With AI-Powered Nutrition
+							</span>
+						</h1>
+						<p className="text-muted-foreground md:text-xl">
+							Get personalized meal plans that adapt to your
+							goals, preferences, and dietary needs. Backed by
+							science, powered by AI.
+						</p>
+						<div className="space-x-4 pt-4">
+							<Button size="lg">Start Your Journey</Button>
+							<Button variant="outline" size="lg">
+								Learn More
+							</Button>
+						</div>
+					</div>
+				</div>
+				<div
+					className="absolute inset-0 -z-10 bg-[url('/heroBackground.jpg')] bg-cover bg-center bg-no-repeat"
+					style={{
+						maskImage:
+							"linear-gradient(to right, black 40%, transparent 100%)",
+						WebkitMaskImage:
+							"linear-gradient(to right, black 40%, transparent 100%)",
+					}}
+				/>
+				<div className="absolute inset-0 -z-10 bg-gradient-to-r from-background/80 to-background/20" />
+			</section>
 
-      {/* Features Section */}
-      <section className="container py-20">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
-            <Brain className="h-12 w-12 text-primary" />
-            <h3 className="text-xl font-bold">AI-Powered</h3>
-            <p className="text-muted-foreground">Smart meal recommendations that learn from your preferences</p>
-          </Card>
-          <Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
-            <Target className="h-12 w-12 text-primary" />
-            <h3 className="text-xl font-bold">Goal-Focused</h3>
-            <p className="text-muted-foreground">Customized plans for weight loss, muscle gain, or maintenance</p>
-          </Card>
-          <Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
-            <Salad className="h-12 w-12 text-primary" />
-            <h3 className="text-xl font-bold">Dietary Friendly</h3>
-            <p className="text-muted-foreground">Accommodates various dietary restrictions and preferences</p>
-          </Card>
-          <Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
-            <Sparkles className="h-12 w-12 text-primary" />
-            <h3 className="text-xl font-bold">Easy to Follow</h3>
-            <p className="text-muted-foreground">Simple, clear meal plans with detailed instructions</p>
-          </Card>
-        </div>
-      </section>
+			<main className="w-full px-6">
+				<section className=" py-20 w-full">
+					<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+						<Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
+							<Brain className="h-12 w-12 text-primary" />
+							<h3 className="text-xl font-bold">AI-Powered</h3>
+							<p className="text-muted-foreground">
+								Smart meal recommendations that learn from your
+								preferences
+							</p>
+						</Card>
+						<Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
+							<Target className="h-12 w-12 text-primary" />
+							<h3 className="text-xl font-bold">Goal-Focused</h3>
+							<p className="text-muted-foreground">
+								Customized plans for weight loss, muscle gain,
+								or maintenance
+							</p>
+						</Card>
+						<Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
+							<Salad className="h-12 w-12 text-primary" />
+							<h3 className="text-xl font-bold">
+								Dietary Friendly
+							</h3>
+							<p className="text-muted-foreground">
+								Accommodates various dietary restrictions and
+								preferences
+							</p>
+						</Card>
+						<Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
+							<Sparkles className="h-12 w-12 text-primary" />
+							<h3 className="text-xl font-bold">
+								Easy to Follow
+							</h3>
+							<p className="text-muted-foreground">
+								Simple, clear meal plans with detailed
+								instructions
+							</p>
+						</Card>
+					</div>
+				</section>
 
-      {/* CTA Section */}
-      <section className="container py-20">
-        <Card className="relative overflow-hidden border-primary/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-primary/5" />
-          <div className="relative p-6 md:p-12 flex flex-col items-center text-center space-y-4">
-            <h2 className="text-3xl font-bold">Ready to Transform Your Nutrition?</h2>
-            <p className="text-muted-foreground max-w-[600px]">
-              Join Top Academy's AI Meal Planner today and get personalized meal plans that help you achieve your
-              fitness goals.
-            </p>
-            <Button size="lg" className="mt-4">
-              Get Started Now
-            </Button>
-          </div>
-        </Card>
-      </section>
-    </div>
-  )
+				{/* CTA Section */}
+				<section className=" py-20">
+					<Card className="relative overflow-hidden border-primary/20">
+						<div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-primary/5" />
+						<div className="relative p-6 md:p-12 flex flex-col items-center text-center space-y-4">
+							<h2 className="text-3xl font-bold">
+								Ready to Transform Your Nutrition?
+							</h2>
+							<p className="text-muted-foreground max-w-[600px]">
+								Join Top Academy's AI Meal Planner today and get
+								personalized meal plans that help you achieve
+								your fitness goals.
+							</p>
+							<Button size="lg" className="mt-4">
+								Get Started Now
+							</Button>
+						</div>
+					</Card>
+				</section>
+			</main>
+		</div>
+	);
 }
-

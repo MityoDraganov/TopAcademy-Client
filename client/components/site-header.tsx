@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button"
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-5 py-2">
+      <div className=" flex h-16 items-center">
         <Link href="/" className="flex items-center space-x-2">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Top-Academy-Logo-Header-1-sV3d18TIdkx4RJmBHvF4EleN1T3ebP.webp"
+            src="/logo.jpeg"
             alt="Top Academy Logo"
             width={120}
             height={40}
