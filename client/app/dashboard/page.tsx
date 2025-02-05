@@ -2,9 +2,7 @@ import { Card } from "@/components/ui/card"
 import { CalendarDays, Dumbbell, Goal, Salad, TrendingUp, Utensils } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { WeeklyProgress } from "./components/weeklyProgress"
-import { MacroChart } from "./components/macroChart"
-import { MealPlan } from "./components/mealPlan"
+import { MealPlan } from "./components/MealPlan"
 
 
 export default function DashboardPage() {
@@ -56,24 +54,7 @@ export default function DashboardPage() {
           </Card>
         </div>
 
-        {/* Main Content */}
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card className="p-6 bg-secondary/50 backdrop-blur border-primary/20">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <CalendarDays className="h-5 w-5 text-primary" />
-              Weekly Progress
-            </h3>
-            <WeeklyProgress />
-          </Card>
 
-          <Card className="p-6 bg-secondary/50 backdrop-blur border-primary/20">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <Salad className="h-5 w-5 text-primary" />
-              Macro Distribution
-            </h3>
-            <MacroChart />
-          </Card>
-        </div>
 
         {/* Meal Plan Section */}
         <div className="mt-6">
