@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRegisterFormStore } from "@/store/useRegisterFormStore";
+import { useRegisterFormStore } from "@/store/useAuthFormStore";
 import Image from "next/image";
 
 export default function BasinInfo() {
@@ -14,7 +14,7 @@ export default function BasinInfo() {
 	};
 	return (
 		<div className="space-y-6 w-full">
-              <Image src="assets/characters/excited.svg" alt="excited character" className="absolute z-[-1] top-[55%] -left-[40%]" width={500} height={500} />
+              <Image src="/assets/characters/excited.svg" alt="excited character" className="absolute z-[-1] top-[55%] -left-[40%]" width={500} height={500} />
 			<h2 className="text-2xl font-semibold text-gray-900">
 				Basic Information
 			</h2>
