@@ -103,7 +103,13 @@ export default function RegisterPage() {
 					signUpAttempt.firstName &&
 					signUpAttempt.lastName
 				) {
-					await registerUser(formData);
+					const modifiedFormData = {
+						...formData,
+						clerk_id: signUpAttempt.createdUserId,
+						allergies: formData.allergies.split(","),
+						excluded_foods: formData.excluded_foods.split(","),
+					};
+					await registerUser(modifiedFormData);
 				} else {
 					throw new Error("Incomplete sign-up attempt data");
 				}

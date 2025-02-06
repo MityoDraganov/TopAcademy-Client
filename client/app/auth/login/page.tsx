@@ -6,14 +6,45 @@ import { useLoginFormStore } from "@/store/useAuthFormStore";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import { useClerk, useSignIn } from "@clerk/nextjs";
+import { showError, showInfo } from "@/components/toast";
+import { useRouter } from "next/navigation";
 
 export default function AppleStyleMultiStepForm() {
 	const { formData, updateForm } = useLoginFormStore();
+	const { signIn, isLoaded, setActive } = useSignIn();
+	const { signOut } = useClerk();
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log(formData);
-	};
+		await signOut();
+		if (!isLoaded) return;
+
+		const router = useRouter();
+	
+		// Start the sign-in process using the email and password provided
+		try {
+		  if (formData.email === "" || formData.password === "") {
+			showInfo("Please fill in all fields");
+			return;
+		  }
+		  const signInAttempt = await signIn.create({
+			identifier: formData.email,
+			password: formData.password,
+		  });
+	
+		  if (signInAttempt.status === "complete") {
+			await setActive({ session: signInAttempt.createdSessionId });
+			router.push("/dashboard");
+		  } else {
+			showError("An error occurred. Please try again.");
+		  }
+		} catch (err: unknown) {
+		  console.error("Error:", JSON.stringify(err, null, 2));
+		  showError("An error occurred. Please try again.");
+		  return;
+		}
+	  };
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
