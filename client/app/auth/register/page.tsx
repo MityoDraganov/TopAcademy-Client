@@ -8,7 +8,7 @@ import BasicInfo from "./steps/BasicInfo";
 import PhysicalDetails from "./steps/PhysicalDetails";
 import HealthGoals from "./steps/HealthGoals";
 import DietaryPreference from "./steps/DietaryPreferences";
-import { useRegisterFormStore } from "@/store/useRegisterFormStore";
+import { useRegisterFormStore } from "@/store/useAuthFormStore";
 
 const steps = [
 	"Basic Info",

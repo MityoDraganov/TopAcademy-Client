@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useRegisterFormStore } from "@/store/useRegisterFormStore";
+import { useRegisterFormStore } from "@/store/useAuthFormStore";
 import Image from "next/image";
 
 export default function HealthGoals() {
@@ -9,7 +9,7 @@ export default function HealthGoals() {
 	return (
 		<div className="space-y-6">
                     <Image
-                            src="assets/characters/thinking.svg"
+                            src="/assets/characters/thinking.svg"
                             alt="thinking character"
                             className="absolute  top-[45%] left-[5%] translate-x-[-50%] z-[-1]"
                             width={500}

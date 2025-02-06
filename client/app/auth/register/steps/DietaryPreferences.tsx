@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
-import { useRegisterFormStore } from "@/store/useRegisterFormStore";
+import { useRegisterFormStore } from "@/store/useAuthFormStore";
 import Image from "next/image";
 
 export default function DietaryPreference() {
@@ -18,7 +18,7 @@ export default function DietaryPreference() {
 	return (
 		<div className="space-y-6">
                 <Image
-                                        src="assets/characters/thinkingOfFood.svg"
+                                        src="/assets/characters/thinkingOfFood.svg"
                                         alt="thinking character"
                                         className="absolute  top-[50%] left-[30%] translate-x-[-50%] z-[-1] opacity-50"
                                         width={500}

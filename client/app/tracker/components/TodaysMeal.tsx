@@ -5,7 +5,7 @@ export default function TodaysMeal() {
         <div className="flex flex-col gap-4">
             <h4>
 
-            <Soup />
+                <Soup />
             </h4>
         </div>
     )

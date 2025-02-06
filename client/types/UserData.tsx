@@ -1,4 +1,4 @@
-export interface UserFormData {
+export interface UserRegisterFormData {
     username: string
     first_name: string
     last_name: string
@@ -14,5 +14,11 @@ export interface UserFormData {
     excluded_foods: string[]
     meals_per_day: number
   }
+  
+  export interface UserLoginFormData {
+    email: string
+    password: string
+  }
+  
   
   
