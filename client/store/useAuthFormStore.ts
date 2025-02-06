@@ -29,6 +29,8 @@ export const useRegisterFormStore = create<RegisterFormStore>((set) => ({
 		allergies: [],
 		excluded_foods: [],
 		meals_per_day: 3,
+    confirmPassword: "",
+    password: "",
 	},
 	updateForm: (field, value) =>
 		set((state) => ({
@@ -51,6 +53,8 @@ export const useRegisterFormStore = create<RegisterFormStore>((set) => ({
 				allergies: [],
 				excluded_foods: [],
 				meals_per_day: 3,
+        confirmPassword: "",
+        password: "",
 			},
 		})),
 }));

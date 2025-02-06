@@ -13,6 +13,8 @@ export interface UserRegisterFormData {
     allergies: string[]
     excluded_foods: string[]
     meals_per_day: number
+    password: string
+    confirmPassword: string
   }
   
   export interface UserLoginFormData {

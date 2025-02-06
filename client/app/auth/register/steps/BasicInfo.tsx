@@ -85,6 +85,42 @@ export default function BasinInfo() {
 					className="mt-1"
 				/>
 			</div>
+
+			<div>
+				<Label
+					htmlFor="password"
+					className="text-sm font-medium text-gray-700"
+				>
+					Password
+				</Label>
+				<Input
+                    name="password"
+					id="password"
+					type="password"
+					value={formData.password}
+					onChange={handleChange} 
+					required
+					className="mt-1"
+				/>
+			</div>
+
+			<div>
+				<Label
+					htmlFor="confirmPassword"
+					className="text-sm font-medium text-gray-700"
+				>
+					Confirm Password
+				</Label>
+				<Input
+                    name="confirmPassword"
+					id="confirmPassword"
+					type="password"
+					value={formData.confirmPassword}
+					onChange={handleChange} 
+					required
+					className="mt-1"
+				/>
+			</div>
 		</div>
 	);
 }
