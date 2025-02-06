@@ -7,7 +7,7 @@ export default function HealthGoals() {
 	const { formData, updateForm } = useRegisterFormStore();
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-6 h-full">
                     <Image
                             src="/assets/characters/thinking.svg"
                             alt="thinking character"

@@ -9,30 +9,133 @@ import PhysicalDetails from "./steps/PhysicalDetails";
 import HealthGoals from "./steps/HealthGoals";
 import DietaryPreference from "./steps/DietaryPreferences";
 import { useRegisterFormStore } from "@/store/useAuthFormStore";
+import EmailConfirmation from "./steps/EmailConfirmation";
+import { showError } from "@/components/toast";
+import { useClerk, useSession, useSignUp } from "@clerk/nextjs";
+import { validateFields } from "@/lib/validator";
+import { useRouter } from "next/navigation";
+import { registerUser } from "@/app/api/requests/auth";
 
 const steps = [
 	"Basic Info",
 	"Physical Details",
 	"Health Goals",
 	"Dietary Preferences",
+	"Email Confirmation",
 ];
 
-export default function AppleStyleMultiStepForm() {
+interface ClerkError {
+	errors: Array<{
+		message: string;
+	}>;
+}
+
+export default function RegisterPage() {
 	const [currentStep, setCurrentStep] = useState(0);
-
+	const router = useRouter();
 	const { formData } = useRegisterFormStore();
+	const [showOtp, setShowOtp] = useState(false);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const { signUp, isLoaded, setActive } = useSignUp();
+	const { isSignedIn } = useSession();
+	const { signOut } = useClerk();
+
+	const [emailVerificationCode, setEmailVerificationCode] =
+		useState<string>("");
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		console.log("submit");
 		e.preventDefault();
-		console.log(formData);
+		if (!signUp) {
+			return;
+		}
+		if (isSignedIn) {
+			await signOut();
+		}
+		try {
+			console.log(formData);
+			if (validateFields(formData).length > 0) {
+				showError("Please fill all fields");
+				return;
+			}
+			if (formData.password !== formData.confirmPassword) {
+				showError("Passwords don't match");
+				return;
+			}
+			const response = await signUp.create({
+				emailAddress: formData.email,
+				password: formData.password,
+				firstName: formData.first_name,
+				lastName: formData.last_name,
+			});
+			await signUp.prepareEmailAddressVerification({
+				strategy: "email_code",
+			});
+			await setActive({
+				session: response.createdSessionId,
+			});
+
+			setShowOtp(true);
+		} catch (err) {
+			console.log(JSON.stringify(err, null, 2));
+			if (err && typeof err === "object" && "errors" in err) {
+				(err as ClerkError).errors.forEach((error) => {
+					showError("Error creating account: " + error.message);
+				});
+			} else {
+				showError("An unexpected error occurred");
+			}
+		}
+	};
+
+	const handleOtpSubmit = async (e: React.FormEvent) => {
+		console.log("opt submit");
+		e.preventDefault();
+		if (!isLoaded) return;
+		try {
+			const signUpAttempt = await signUp.attemptEmailAddressVerification({
+				code: emailVerificationCode,
+			});
+			if (signUpAttempt.status === "complete") {
+				if (
+					signUpAttempt.createdUserId &&
+					signUpAttempt.emailAddress &&
+					signUpAttempt.firstName &&
+					signUpAttempt.lastName
+				) {
+					const modifiedFormData = {
+						...formData,
+						clerk_id: signUpAttempt.createdUserId,
+						allergies: formData.allergies.split(","),
+						excluded_foods: formData.excluded_foods.split(","),
+					};
+					await registerUser(modifiedFormData);
+				} else {
+					throw new Error("Incomplete sign-up attempt data");
+				}
+				await setActive({ session: signUpAttempt.createdSessionId });
+				router.push("/dashboard");
+			} else {
+				throw new Error(JSON.stringify(signUpAttempt, null, 2));
+			}
+		} catch (err: unknown) {
+			if (err && typeof err === "object" && "message" in err) {
+				showError(
+					"Error verifying email: " +
+						(err as { message: string }).message
+				);
+			} else {
+				showError("An unexpected error occurred");
+			}
+			return;
+		}
 	};
 
 	return (
-		<div className=" h-full w-screen flex justify-center p-4">
-			<div className="w-full max-w-3xl bg-white/5 rounded-2xl shadow-lg overflow-hidden">
-		
-				<div className="bg-gray-100 px-8 py-4">
-					<div className="flex justify-between">
+		<div className=" h-screen w-screen flex justify-center p-4 overflow-y-auto">
+			<div className="w-full max-w-3xl bg-white/5 rounded-2xl shadow-lg overflow-hidden overflow-y-auto pb-20">
+				<div className="bg-gray-100 px-4 py-4">
+					<div className="flex justify-between gap-2">
 						{steps.map((step, index) => (
 							<div
 								key={step}
@@ -63,7 +166,18 @@ export default function AppleStyleMultiStepForm() {
 				</div>
 
 				{/* Form Content */}
-				<form onSubmit={handleSubmit} className="p-8">
+				<form
+					onSubmit={(e) => {
+						e.preventDefault(); // Prevent form submission by default
+
+						if(showOtp) {
+							handleOtpSubmit(e);
+						} else {
+							handleSubmit(e);
+						}
+					}}
+					className="p-8"
+				>
 					<AnimatePresence mode="wait">
 						<motion.div
 							key={currentStep}
@@ -79,6 +193,17 @@ export default function AppleStyleMultiStepForm() {
 							{currentStep === 2 && <HealthGoals />}
 
 							{currentStep === 3 && <DietaryPreference />}
+
+							{currentStep === 4 && (
+								<EmailConfirmation
+									setEmailVerificationCode={
+										setEmailVerificationCode
+									}
+									emailVerificationCode={
+										emailVerificationCode
+									}
+								/>
+							)}
 						</motion.div>
 					</AnimatePresence>
 
@@ -94,7 +219,7 @@ export default function AppleStyleMultiStepForm() {
 							Previous
 						</Button>
 
-						{currentStep === steps.length - 1 ? (
+						{currentStep >= steps.length - 1 ? (
 							<Button
 								type="submit"
 								className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
