@@ -120,7 +120,7 @@ export default function MealPlan() {
       <main className="container py-6 max-w-4xl mx-auto px-2">
         {/* Title Section */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-red-500 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
             MACROS & MEAL PLAN
           </h1>
           <div className="flex items-center justify-center gap-2 text-gray-600">
@@ -133,7 +133,7 @@ export default function MealPlan() {
           {macros.map((macro) => (
             <Card key={macro.label} className="relative">
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-red-500">
+                <div className="text-2xl font-bold text-primary">
                   {macro.value}
                 </div>
                 <div className="text-sm text-gray-600">{macro.label}</div>
