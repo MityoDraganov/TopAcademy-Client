@@ -262,7 +262,7 @@ export default function MealPlan() {
   };
 
   return (
-    <div className="min-h-screen bg-pink-50 pb-24 overflow-y-auto">
+    <div className="min-h-screen bg-pink-50 pb-32 overflow-y-auto">
       <main className="container py-6 max-w-4xl mx-auto">
         {/* Title Section */}
         <div className="text-center mb-8">

@@ -1,21 +1,24 @@
 import { Button } from "./ui/button";
 import { Calendar, Home, User2Icon } from "lucide-react";
+import Link from "next/link";
 
-export default function Footer(){
-    return(
-    <nav className="fixed bottom-0 left-0 right-0 flex justify-around border-t bg-white p-2">
-    <Button variant="ghost" size="icon" className="flex flex-col items-center gap-1">
-      <Home className="h-5 w-5" />
-      <span className="text-xs">Home</span>
-    </Button>
-    <Button variant="ghost" size="icon" className="flex flex-col items-center gap-1">
-      <Calendar className="h-5 w-5" />
-      <span className="text-xs">Plan</span>
-    </Button>
-    <Button variant="ghost" size="icon" className="flex flex-col items-center gap-1">
-      <User2Icon className="h-5 w-5" />
-      <span className="text-xs">Profile</span>
-    </Button>
-  </nav>
-    );
+export default function Footer() {
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex justify-around border-t bg-background shadow-lg p-4">
+      <Button variant="ghost" size="icon" className="flex flex-col items-center gap-1 py-6 px-6">
+        <Home className="h-5 w-5" />
+        <span className="text-xs">Home</span>
+      </Button>
+      <Link href="/meal-plan">
+        <Button variant="ghost" size="icon" className="flex flex-col items-center gap-1 py-6 px-6">
+          <Calendar className="h-5 w-5" />
+          <span className="text-xs">Plan</span>
+        </Button>
+      </Link>
+      <Button variant="ghost" size="icon" className="flex flex-col items-center gap-1 py-6 px-6">
+        <User2Icon className="h-5 w-5" />
+        <span className="text-xs">Profile</span>
+      </Button>
+    </nav>
+  );
 }
