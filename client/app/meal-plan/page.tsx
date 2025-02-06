@@ -88,10 +88,10 @@ const MealCard = ({
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden border shadow-md">
       <CardContent className="p-0">
         {/* Meal Header */}
-        <div className="p-4 flex items-start gap-4">
+        <div className="flex items-center gap-4 p-4 border-b">
           <Image
             src={meal.image || "/placeholder.svg"}
             alt={meal.title}
@@ -100,12 +100,16 @@ const MealCard = ({
             className="rounded-lg object-cover"
           />
           <div className="flex-1">
-            <div className="font-medium text-gray-500">{meal.type}</div>
-            <div className="font-semibold text-lg">{meal.title}</div>
+            <div className="text-sm font-medium text-gray-500">
+              {meal.type}
+            </div>
+            <div className="text-lg font-semibold">{meal.title}</div>
           </div>
           <div className="flex items-center gap-2">
-            <Utensils className="h-4 w-4" />
-            <Button className="bg-red-500 hover:bg-red-600">SELECT</Button>
+            <Utensils className="h-4 w-4 text-gray-500" />
+            <Button className="bg-red-500 hover:bg-red-600 text-white">
+              SELECT
+            </Button>
           </div>
         </div>
 
@@ -115,7 +119,7 @@ const MealCard = ({
             {ingredients.map((ingredient, index) => (
               <div
                 key={ingredient.name}
-                className="flex items-center gap-4 p-2 bg-gray-50 rounded-lg"
+                className="flex items-center gap-4 p-2 bg-gray-50 rounded-lg border"
               >
                 <div className="w-24">
                   <Input
@@ -123,10 +127,10 @@ const MealCard = ({
                     onChange={(e) =>
                       handleIngredientAmountChange(index, e.target.value)
                     }
-                    className="h-8 text-center"
+                    className="h-8 text-center focus:ring-2 focus:ring-red-400"
                   />
                 </div>
-                <span className="flex-1">{ingredient.name}</span>
+                <span className="flex-1 text-sm">{ingredient.name}</span>
                 <Image
                   src={ingredient.image || "/placeholder.svg"}
                   alt={ingredient.name}
@@ -141,7 +145,7 @@ const MealCard = ({
           {meal.sides && (
             <>
               <div className="my-4">
-                <div className="bg-pink-100 py-2 px-4 text-center text-pink-700 font-medium">
+                <div className="bg-pink-100 py-2 px-4 text-center text-pink-700 font-medium rounded-t-lg">
                   On the Side
                 </div>
               </div>
@@ -149,7 +153,7 @@ const MealCard = ({
                 {sides.map((ingredient, index) => (
                   <div
                     key={ingredient.name}
-                    className="flex items-center gap-4 p-2 bg-gray-50 rounded-lg"
+                    className="flex items-center gap-4 p-2 bg-gray-50 rounded-lg border"
                   >
                     <div className="w-24">
                       <Input
@@ -157,10 +161,10 @@ const MealCard = ({
                         onChange={(e) =>
                           handleSideAmountChange(index, e.target.value)
                         }
-                        className="h-8 text-center"
+                        className="h-8 text-center focus:ring-2 focus:ring-red-400"
                       />
                     </div>
-                    <span className="flex-1">{ingredient.name}</span>
+                    <span className="flex-1 text-sm">{ingredient.name}</span>
                     <Image
                       src={ingredient.image || "/placeholder.svg"}
                       alt={ingredient.name}
