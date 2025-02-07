@@ -12,5 +12,5 @@ export const registerUser = async (data: UserRegisterFormDataModified) => {
 }
 
 export const createWeeklyPlan = async () => {
-    return api.post(endpoints.createWeeklyPlan, {})
+    return api.post(endpoints.createWeeklyPlan)
 }

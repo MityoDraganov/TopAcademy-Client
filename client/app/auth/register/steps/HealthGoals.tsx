@@ -8,22 +8,25 @@ export default function HealthGoals() {
 
 	return (
 		<div className="space-y-6 h-full">
-                    <Image
-                            src="/assets/characters/thinking.svg"
-                            alt="thinking character"
-                            className="absolute  top-[45%] left-[5%] translate-x-[-50%] z-[-1]"
-                            width={500}
-                            height={500}
-                        />
+			<Image
+				src="/assets/characters/thinking.svg"
+				alt="thinking character"
+				className="absolute top-full  translate-x-[-55%] z-[-1]"
+				width={500}
+				height={500}
+			/>
 			<h2 className="text-2xl font-semibold text-gray-900">
 				Health Goals
 			</h2>
-		
+
+			{/* Goal Selection */}
 			<div>
 				<Label className="text-sm font-medium text-gray-700">
 					Goal
 				</Label>
 				<RadioGroup
+					id="goal"
+					name="goal"
 					value={formData.goal}
 					onValueChange={(value) => updateForm("goal", value)}
 					className="grid grid-cols-2 gap-4 mt-2"
@@ -34,15 +37,22 @@ export default function HealthGoals() {
 						["maintain_weight", "Maintain Weight"],
 						["build_muscle", "Build Muscle"],
 					].map(([value, label]) => (
-						<div key={value} className="flex items-center">
+						// No extra wrapper div
+						<div key={value}>
 							<RadioGroupItem
 								value={value}
 								id={value}
-								className="peer sr-only"
+								className="peer hidden"
 							/>
 							<Label
 								htmlFor={value}
-								className="flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md cursor-pointer peer-checked:bg-blue-50 peer-checked:border-blue-500 hover:bg-gray-50"
+								className={`flex items-center justify-center w-full px-3 py-2 text-sm font-medium 
+                                           text-gray-700 bg-white border border-gray-200 rounded-md cursor-pointer 
+                                          ${
+												formData.goal === value
+													? "bg-gray-100"
+													: ""
+											}`}
 							>
 								{label}
 							</Label>
@@ -50,11 +60,15 @@ export default function HealthGoals() {
 					))}
 				</RadioGroup>
 			</div>
+
+			{/* Activity Level Selection */}
 			<div>
 				<Label className="text-sm font-medium text-gray-700">
 					Activity Level
 				</Label>
 				<RadioGroup
+					id="activity_level"
+					name="activity_level"
 					value={formData.activity_level}
 					onValueChange={(value) =>
 						updateForm("activity_level", value)
@@ -74,15 +88,22 @@ export default function HealthGoals() {
 							"Extremely Active (physical job or 2x training)",
 						],
 					].map(([value, label]) => (
-						<div key={value} className="flex items-center">
+						// No extra wrapper div
+						<div key={value}>
 							<RadioGroupItem
 								value={value}
 								id={value}
-								className="peer sr-only"
+								className="peer hidden"
 							/>
 							<Label
 								htmlFor={value}
-								className="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-gray-700 bg-white/70 border border-gray-200 rounded-md cursor-pointer peer-checked:bg-blue-50 peer-checked:border-blue-500 hover:bg-gray-50"
+								className={`flex items-center justify-between w-full px-3 py-2 text-sm font-medium 
+                                           text-gray-700 bg-white/80 border border-gray-200 rounded-md cursor-pointer 
+                                  ${
+										formData.activity_level === value
+											? "bg-gray-100"
+											: ""
+									}`}
 							>
 								{label}
 							</Label>

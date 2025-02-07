@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -131,6 +131,7 @@ export default function RegisterPage() {
 			return;
 		}
 	};
+
 
 	return (
 		<div className=" h-screen w-screen flex justify-center p-4 overflow-y-auto">

@@ -10,15 +10,16 @@ export default function PhysicalDetails() {
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
-		const { name, value } = e.target;
-		updateForm(name as keyof typeof formData, value);
+		const { name, value, type } = e.target;
+		const parsedValue = type === "number" ? Number(value) : value;
+		updateForm(name as keyof typeof formData, parsedValue);
 	};
 	return (
 		<div className="space-y-6">
 			<Image
 				src="/assets/characters/restingBench.svg"
 				alt="excited character"
-				className="absolute  top-full left-1/2 translate-x-[-50%] z-[-1]"
+				className="absolute  top-[150%] left-1/2 translate-x-[-50%] z-[-1]"
 				width={500}
 				height={500}
 			/>
@@ -42,6 +43,7 @@ export default function PhysicalDetails() {
 						onChange={handleChange}
 						required
 						className="mt-1"
+						name="age"
 					/>
 				</div>
 				<div>
@@ -60,6 +62,7 @@ export default function PhysicalDetails() {
 						onChange={handleChange}
 						required
 						className="mt-1"
+						name="height"
 					/>
 				</div>
 				<div>
@@ -79,6 +82,7 @@ export default function PhysicalDetails() {
 						onChange={handleChange}
 						required
 						className="mt-1"
+						name="weight"
 					/>
 				</div>
 			</div>
@@ -89,18 +93,19 @@ export default function PhysicalDetails() {
 				<RadioGroup
 					value={formData.gender}
 					onValueChange={(value) => updateForm("gender", value)} // Use onValueChange instead of onChange
-					className="flex gap-4 mt-2"
+					className="gap-4 mt-2 w-full grid grid-cols-3"
+					
 				>
 					{["male", "female", "other"].map((gender) => (
 						<div key={gender} className="flex items-center">
 							<RadioGroupItem
 								value={gender}
 								id={gender}
-								className="peer sr-only"
+								className="peer sr-only w-full"
 							/>
 							<Label
 								htmlFor={gender}
-								className="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md cursor-pointer peer-checked:bg-blue-50 peer-checked:border-blue-500 hover:bg-gray-50"
+								className={`flex items-center w-full justify-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md cursor-pointer peer-checked:bg-blue-50 peer-checked:border-blue-500 ${formData.gender === gender ? "bg-gray-100" : ""}`}
 							>
 								{gender.charAt(0).toUpperCase() +
 									gender.slice(1)}

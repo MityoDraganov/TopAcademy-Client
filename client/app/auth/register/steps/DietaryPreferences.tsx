@@ -17,13 +17,13 @@ export default function DietaryPreference() {
 
 	return (
 		<div className="space-y-6">
-                <Image
-                                        src="/assets/characters/thinkingOfFood.svg"
-                                        alt="thinking character"
-                                        className="absolute  top-[50%] left-[30%] translate-x-[-50%] z-[-1] opacity-50"
-                                        width={500}
-                                        height={500}
-                                    />
+			<Image
+				src="/assets/characters/thinkingOfFood.svg"
+				alt="thinking character"
+				className="absolute  top-[50%] left-[30%] translate-x-[-50%] z-[-1] opacity-50"
+				width={500}
+				height={500}
+			/>
 			<h2 className="text-2xl font-semibold text-gray-900">
 				Dietary Preferences
 			</h2>
@@ -54,7 +54,7 @@ export default function DietaryPreference() {
 							/>
 							<Label
 								htmlFor={value}
-								className="flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md cursor-pointer peer-checked:bg-blue-50 peer-checked:border-blue-500 hover:bg-gray-50"
+								className={`flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md cursor-pointer peer-checked:bg-blue-50 peer-checked:border-blue-500 ${formData.dietary_preference === value ? "bg-gray-100" : "" }`}
 							>
 								{label}
 							</Label>
@@ -75,7 +75,7 @@ export default function DietaryPreference() {
 					onChange={handleChange}
 					placeholder="e.g. peanuts, shellfish"
 					className="mt-1"
-                    name="allergies"
+					name="allergies"
 				/>
 			</div>
 			<div>
@@ -91,7 +91,7 @@ export default function DietaryPreference() {
 					onChange={handleChange}
 					placeholder="e.g. mushrooms, olives"
 					className="mt-1"
-                    name="excluded_foods"
+					name="excluded_foods"
 				/>
 			</div>
 			<div>
@@ -104,7 +104,7 @@ export default function DietaryPreference() {
 					step={1}
 					value={[formData.meals_per_day]}
 					onValueChange={(value) =>
-						updateForm("meals_per_day", value)
+						updateForm("meals_per_day", value[0])
 					}
 					className="mt-2"
 				/>

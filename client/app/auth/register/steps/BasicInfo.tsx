@@ -13,8 +13,8 @@ export default function BasinInfo() {
 		updateForm(name as keyof typeof formData, value);
 	};
 	return (
-		<div className="space-y-6 w-full">
-              <Image src="/assets/characters/excited.svg" alt="excited character" className="absolute z-[-1] top-[55%] -left-[40%] opacity-90" width={500} height={500} />
+		<div className="flex flex-col gap-6 w-full">
+
 			<h2 className="text-2xl font-semibold text-gray-900">
 				Basic Information
 			</h2>
@@ -27,11 +27,11 @@ export default function BasinInfo() {
 				</Label>
 				<Input
 					id="username"
-                    name="username"
+					name="username"
 					value={formData.username}
 					onChange={handleChange}
 					required
-					className="mt-1"
+					className="mt-1 "
 				/>
 			</div>
 			<div className="grid grid-cols-2 gap-4">
@@ -43,12 +43,12 @@ export default function BasinInfo() {
 						First Name
 					</Label>
 					<Input
-                        name="first_name"
+						name="first_name"
 						id="first_name"
 						value={formData.first_name}
 						onChange={handleChange}
 						required
-						className="mt-1"
+						className="mt-1 "
 					/>
 				</div>
 				<div>
@@ -59,12 +59,12 @@ export default function BasinInfo() {
 						Last Name
 					</Label>
 					<Input
-                        name="last_name"
+						name="last_name"
 						id="last_name"
 						value={formData.last_name}
 						onChange={handleChange}
 						required
-						className="mt-1"
+						className="mt-1 "
 					/>
 				</div>
 			</div>
@@ -76,16 +76,15 @@ export default function BasinInfo() {
 					Email
 				</Label>
 				<Input
-                    name="email"
+					name="email"
 					id="email"
 					type="email"
 					value={formData.email}
-					onChange={handleChange} 
+					onChange={handleChange}
 					required
-					className="mt-1"
+					className="mt-1 "
 				/>
 			</div>
-
 			<div>
 				<Label
 					htmlFor="password"
@@ -94,16 +93,15 @@ export default function BasinInfo() {
 					Password
 				</Label>
 				<Input
-                    name="password"
+					name="password"
 					id="password"
 					type="password"
 					value={formData.password}
-					onChange={handleChange} 
+					onChange={handleChange}
 					required
-					className="mt-1"
+					className="mt-1 "
 				/>
 			</div>
-
 			<div>
 				<Label
 					htmlFor="confirmPassword"
@@ -112,13 +110,13 @@ export default function BasinInfo() {
 					Confirm Password
 				</Label>
 				<Input
-                    name="confirmPassword"
+					name="confirmPassword"
 					id="confirmPassword"
 					type="password"
 					value={formData.confirmPassword}
-					onChange={handleChange} 
+					onChange={handleChange}
 					required
-					className="mt-1"
+					className="mt-1 "
 				/>
 			</div>
 		</div>
