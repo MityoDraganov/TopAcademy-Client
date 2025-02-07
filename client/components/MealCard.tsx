@@ -97,13 +97,13 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onToggle, onUpdate }) => {
                   Switch
                 </Button>
               </DialogTrigger>
-              <DialogContent className="w-[30vw]">
+              <DialogContent className="w-[90vw] sm:w-[70vw] md:w-[50vw] lg:w-[30vw]">
                 <DialogHeader>
-                  <DialogTitle className="text-red-500 text-2xl font-bold">
+                  <DialogTitle className="text-red-500 text-xl sm:text-2xl font-bold">
                     SELECT YOUR MEAL
                   </DialogTitle>
                 </DialogHeader>
-                <div className="grid grid-cols-3 gap-4 bg-red-500/10 p-4 h-[43vh] rounded-lg">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4 bg-red-500/10 p-2 sm:p-4 h-[50vh] sm:h-[43vh] rounded-lg overflow-y-auto">
                   {/* Placeholder meal items */}
                   {Array.from({ length: 9 }).map((_, index) => (
                     <Button
@@ -120,9 +120,9 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onToggle, onUpdate }) => {
                           alt="Placeholder"
                           width={150}
                           height={150}
-                          className="rounded-t-lg object-cover w-full h-[120px]"
+                          className="rounded-t-lg object-cover w-full h-[80px] sm:h-[120px]"
                         />
-                        <div className="p-2 text-sm font-medium text-gray-700 bg-white rounded-b-lg w-full flex items-center justify-center text-center">
+                        <div className="p-1 sm:p-2 text-xs sm:text-sm font-medium text-gray-700 bg-white rounded-b-lg w-full flex items-center justify-center text-center">
                           Chorizo
                         </div>
                       </div>
@@ -131,7 +131,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onToggle, onUpdate }) => {
                           <div className="bg-red-500 text-white rounded-full p-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
+                              className="h-3 w-3 sm:h-4 sm:w-4"
                               viewBox="0 0 20 20"
                               fill="currentColor"
                             >
@@ -147,11 +147,11 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onToggle, onUpdate }) => {
                     </Button>
                   ))}
                 </div>
-                <DialogFooter >
+                <DialogFooter>
                   <DialogClose className="w-full" disabled={selectedMeal === null}>
                     <Button
                       type="submit"
-                      className="w-full py-5 text-md font-semibold"
+                      className="w-full py-3 sm:py-5 text-sm sm:text-md font-semibold"
                       disabled={selectedMeal === null}
                       onClick={() => {
                         setSelectedMeal(null);
