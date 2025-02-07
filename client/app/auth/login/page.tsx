@@ -14,13 +14,13 @@ export default function AppleStyleMultiStepForm() {
 	const { formData, updateForm } = useLoginFormStore();
 	const { signIn, isLoaded, setActive } = useSignIn();
 	const { signOut } = useClerk();
+	const router = useRouter();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		await signOut();
 		if (!isLoaded) return;
 
-		const router = useRouter();
 	
 		// Start the sign-in process using the email and password provided
 		try {
