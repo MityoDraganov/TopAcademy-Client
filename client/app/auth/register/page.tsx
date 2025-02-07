@@ -53,8 +53,9 @@ export default function RegisterPage() {
 			await signOut();
 		}
 		try {
-			console.log(formData);
-			if (validateFields(formData).length > 0) {
+			
+			const { allergies, excluded_foods, ...filteredFormData } = formData;
+			if (validateFields(filteredFormData).length > 0) {
 				showError("Please fill all fields");
 				return;
 			}
@@ -106,8 +107,8 @@ export default function RegisterPage() {
 					const modifiedFormData = {
 						...formData,
 						clerk_id: signUpAttempt.createdUserId,
-						allergies: formData.allergies.split(","),
-						excluded_foods: formData.excluded_foods.split(","),
+						allergies: formData?.allergies.split(","),
+						excluded_foods: formData?.excluded_foods.split(","),
 					};
 					await registerUser(modifiedFormData);
 				} else {
