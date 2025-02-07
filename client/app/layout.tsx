@@ -4,7 +4,7 @@ import "./globals.css";
 import type React from "react"; // Import React
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, SignedIn } from "@clerk/nextjs";
 import { ToastContainer, Bounce } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,8 +21,10 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<body className={`${inter.className} h-screen flex flex-col overflow-hidden`}>
-			<ClerkProvider
+			<body
+				className={`${inter.className} h-screen flex flex-col overflow-hidden`}
+			>
+				<ClerkProvider
 					publishableKey={
 						process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 					}
@@ -41,10 +43,12 @@ export default function RootLayout({
 						theme="dark"
 						transition={Bounce}
 					/>
-				<Header />
-				<Footer />
-				{children}
-			</ClerkProvider>
+					<SignedIn>
+						<Header />
+						<Footer />
+					</SignedIn>
+					{children}
+				</ClerkProvider>
 			</body>
 		</html>
 	);

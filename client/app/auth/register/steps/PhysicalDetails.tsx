@@ -18,7 +18,7 @@ export default function PhysicalDetails() {
 			<Image
 				src="/assets/characters/restingBench.svg"
 				alt="excited character"
-				className="absolute  top-[50%] left-1/2 translate-x-[-50%] z-[-1]"
+				className="absolute  top-full left-1/2 translate-x-[-50%] z-[-1]"
 				width={500}
 				height={500}
 			/>

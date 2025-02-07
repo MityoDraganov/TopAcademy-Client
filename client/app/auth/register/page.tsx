@@ -15,6 +15,7 @@ import { useClerk, useSession, useSignUp } from "@clerk/nextjs";
 import { validateFields } from "@/lib/validator";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/app/api/requests/auth";
+import Link from "next/link";
 
 const steps = [
 	"Basic Info",
@@ -53,7 +54,6 @@ export default function RegisterPage() {
 			await signOut();
 		}
 		try {
-			
 			const { allergies, excluded_foods, ...filteredFormData } = formData;
 			if (validateFields(filteredFormData).length > 0) {
 				showError("Please fill all fields");
@@ -171,16 +171,17 @@ export default function RegisterPage() {
 					onSubmit={(e) => {
 						e.preventDefault(); // Prevent form submission by default
 
-						if(showOtp) {
+						if (showOtp) {
 							handleOtpSubmit(e);
 						} else {
 							handleSubmit(e);
 						}
 					}}
-					className="p-8"
+					className="p-8 flex flex-col gap-6"
 				>
 					<AnimatePresence mode="wait">
 						<motion.div
+							className="relative"
 							key={currentStep}
 							initial={{ opacity: 0, x: 20 }}
 							animate={{ opacity: 1, x: 0 }}
@@ -208,7 +209,7 @@ export default function RegisterPage() {
 						</motion.div>
 					</AnimatePresence>
 
-					<div className="mt-8 flex justify-between">
+					<div className=" flex justify-between">
 						<Button
 							type="button"
 							variant="outline"
@@ -240,6 +241,13 @@ export default function RegisterPage() {
 							</Button>
 						)}
 					</div>
+
+					<Link
+						href="/auth/login"
+						className="block mt-4 text-sm hover:underline text-left pb-4"
+					>
+						Already have an account? <span className="text-primary font-medium">Login</span>
+					</Link>
 				</form>
 			</div>
 		</div>

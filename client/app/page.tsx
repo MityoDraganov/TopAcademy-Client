@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Brain, Salad, Target, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
 	return (
@@ -10,7 +11,7 @@ export default function Home() {
 				<section className="relative">
 					<div className="flex flex-col items-center justify-center space-y-8 py-24 md:py-60 text-center md:text-left">
 						<div className=" md:w-1/2 mr-0 md:ml-auto space-y-4">
-							<h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+							<h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-primary-foreground">
 								Transform Your Body
 								<span className="text-primary">
 									{" "}
@@ -23,23 +24,18 @@ export default function Home() {
 								science, powered by AI.
 							</p>
 							<div className="space-x-4 pt-4">
-								<Button size="lg">Start Your Journey</Button>
+								<Link href="/auth/register">
+									<Button size="lg">
+										Start Your Journey
+									</Button>
+								</Link>
 								<Button variant="outline" size="lg">
 									Learn More
 								</Button>
 							</div>
 						</div>
 					</div>
-					<div
-						className="absolute inset-0 -z-10 bg-[url('/heroBackground.jpg')] bg-cover bg-center bg-no-repeat"
-						style={{
-							maskImage:
-								"linear-gradient(to right, black 40%, transparent 100%)",
-							WebkitMaskImage:
-								"linear-gradient(to right, black 40%, transparent 100%)",
-						}}
-					/>
-					<div className="absolute inset-0 -z-10 bg-gradient-to-r from-background/80 to-background/20" />
+					<div className="absolute inset-0 -z-10 bg-[url('/heroBackground.jpg')] bg-cover bg-center bg-no-repeat" />
 				</section>
 
 				<main className="w-full px-6">
@@ -47,18 +43,22 @@ export default function Home() {
 						<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
 							<Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
 								<Brain className="h-12 w-12 text-primary" />
-								<h3 className="text-xl font-bold">AI-Powered</h3>
+								<h3 className="text-xl font-bold">
+									AI-Powered
+								</h3>
 								<p className="text-muted-foreground">
-									Smart meal recommendations that learn from your
-									preferences
+									Smart meal recommendations that learn from
+									your preferences
 								</p>
 							</Card>
 							<Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
 								<Target className="h-12 w-12 text-primary" />
-								<h3 className="text-xl font-bold">Goal-Focused</h3>
+								<h3 className="text-xl font-bold">
+									Goal-Focused
+								</h3>
 								<p className="text-muted-foreground">
-									Customized plans for weight loss, muscle gain,
-									or maintenance
+									Customized plans for weight loss, muscle
+									gain, or maintenance
 								</p>
 							</Card>
 							<Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
@@ -67,8 +67,8 @@ export default function Home() {
 									Dietary Friendly
 								</h3>
 								<p className="text-muted-foreground">
-									Accommodates various dietary restrictions and
-									preferences
+									Accommodates various dietary restrictions
+									and preferences
 								</p>
 							</Card>
 							<Card className="bg-secondary/50 backdrop-blur p-6 space-y-2 border-primary/20">
@@ -93,13 +93,15 @@ export default function Home() {
 									Ready to Transform Your Nutrition?
 								</h2>
 								<p className="text-muted-foreground max-w-[600px]">
-									Join Top Academy's AI Meal Planner today and get
-									personalized meal plans that help you achieve
-									your fitness goals.
+									Join Top Academy's AI Meal Planner today and
+									get personalized meal plans that help you
+									achieve your fitness goals.
 								</p>
-								<Button size="lg" className="mt-4">
-									Get Started Now
-								</Button>
+								<Link href="/auth/register">
+									<Button size="lg" className="mt-4">
+										Get Started Now
+									</Button>
+								</Link>
 							</div>
 						</Card>
 					</section>

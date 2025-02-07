@@ -1,3 +1,4 @@
+import { UserButton } from "@clerk/nextjs";
 import { ChartNoAxesColumnIncreasing, UserCircle } from "lucide-react";
 
 export default function Header(){
@@ -5,7 +6,7 @@ export default function Header(){
         <div className="flex justify-between items-center p-4">
             <ChartNoAxesColumnIncreasing className="text-[#578FCA]"/>
             <h2 className="font-semibold">Tracker</h2>
-            <UserCircle className="text-[#578FCA]"/>
+            <UserButton />
         </div>
     )
 }

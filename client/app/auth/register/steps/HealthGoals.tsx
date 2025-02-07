@@ -82,7 +82,7 @@ export default function HealthGoals() {
 							/>
 							<Label
 								htmlFor={value}
-								className="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md cursor-pointer peer-checked:bg-blue-50 peer-checked:border-blue-500 hover:bg-gray-50"
+								className="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-gray-700 bg-white/70 border border-gray-200 rounded-md cursor-pointer peer-checked:bg-blue-50 peer-checked:border-blue-500 hover:bg-gray-50"
 							>
 								{label}
 							</Label>
