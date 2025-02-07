@@ -10,32 +10,13 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Meal, Ingredient } from "@/types/WeeklyPlan";
 
-interface Ingredient {
-  amount: string;
-  name: string;
-  image: string;
-}
-
-interface Meal {
-  type: string;
-  title: string;
-  image: string;
-  ingredients: Ingredient[];
-  sides?: Ingredient[];
-  macros: {
-    calories: string;
-    carbs: string;
-    protein: string;
-    fat: string;
-  };
-}
 
 interface MealCardProps {
   meal: Meal;
@@ -47,6 +28,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onToggle, onUpdate }) => {
   const [ingredients, setIngredients] = React.useState(meal.ingredients);
   const [sides, setSides] = React.useState(meal.sides || []);
   const [selectedMeal, setSelectedMeal] = React.useState<number | null>(null);
+  const [showAllIngredients, setShowAllIngredients] = React.useState(false);
 
   const handleIngredientAmountChange = (index: number, newAmount: string) => {
     const updatedIngredients = ingredients.map((ing, i) =>
@@ -73,20 +55,20 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onToggle, onUpdate }) => {
   };
 
   return (
-    <Card className="overflow-hidden border shadow-md my-4 sm:mx-0">
+    <Card className="overflow-hidden border shadow-md my-4 sm:mx-0" key={meal.label}>
       <CardContent className="p-0">
         {/* Meal Header */}
         <div className="flex flex-col sm:flex-row items-center gap-4 p-3 sm:p-4 border-b">
           <Image
             src={meal.image || "/placeholder.svg"}
-            alt={meal.title}
+            alt={meal.label}
             width={100}
             height={100}
             className="rounded-lg object-cover w-full sm:w-auto h-[200px] sm:h-[100px]"
           />
           <div className="flex-1 text-center sm:text-left">
             <div className="text-sm font-medium text-gray-500">{meal.type}</div>
-            <div className="text-lg font-semibold">{meal.title}</div>
+            <div className="text-lg font-semibold">{meal.label}</div>
           </div>
           <div className="flex items-center gap-2 mt-2 sm:mt-0">
             <Utensils className="h-4 w-4 text-gray-500" />
@@ -117,7 +99,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onToggle, onUpdate }) => {
                       <div className="flex flex-col">
                         <Image
                           src="https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"
-                          alt="Placeholder"
+                          alt={`Alternative meal option ${index + 1}`}
                           width={150}
                           height={150}
                           className="rounded-t-lg object-cover w-full h-[80px] sm:h-[120px]"
@@ -169,31 +151,34 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onToggle, onUpdate }) => {
         {/* Ingredients */}
         <div className="p-3 sm:p-4">
           <div className="grid gap-3">
-            {ingredients.map((ingredient, index) => (
+            {(showAllIngredients ? ingredients : ingredients.slice(0, 3)).map((ingredient, index) => (
               <div
-                key={ingredient.name}
+                key={index}
                 className="flex items-center gap-4 p-2 bg-gray-50 rounded-lg border"
               >
                 <div className="w-24">
                   <Input
-                    value={ingredient.amount}
+                    value={Math.round(ingredient.weight) + "g"}
                     onChange={(e) =>
                       handleIngredientAmountChange(index, e.target.value)
                     }
                     className="h-8 text-center focus:ring-2 focus:ring-red-400"
                   />
                 </div>
-                <span className="flex-1 text-sm">{ingredient.name}</span>
-                <Image
-                  src={ingredient.image || "/placeholder.svg"}
-                  alt={ingredient.name}
-                  width={40}
-                  height={40}
-                  className="rounded-md object-cover"
-                />
+                <span className="flex-1 text-sm">{ingredient.food}</span>
               </div>
             ))}
           </div>
+
+          {ingredients.length > 3 && (
+            <Button
+              variant="ghost"
+              onClick={() => setShowAllIngredients(!showAllIngredients)}
+              className="w-full mt-2 text-red-500 hover:text-red-600 hover:bg-red-50"
+            >
+              {showAllIngredients ? 'Show Less' : `Show ${ingredients.length - 3} More Ingredients`}
+            </Button>
+          )}
 
           {meal.sides && (
             <>
@@ -205,26 +190,19 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onToggle, onUpdate }) => {
               <div className="grid gap-3">
                 {sides.map((ingredient, index) => (
                   <div
-                    key={ingredient.name}
+                    key={ingredient.food}
                     className="flex items-center gap-4 p-2 bg-gray-50 rounded-lg border"
                   >
                     <div className="w-24">
                       <Input
-                        value={ingredient.amount}
+                        value={Math.round(ingredient.weight)}
                         onChange={(e) =>
                           handleSideAmountChange(index, e.target.value)
                         }
                         className="h-8 text-center focus:ring-2 focus:ring-red-400"
                       />
                     </div>
-                    <span className="flex-1 text-sm">{ingredient.name}</span>
-                    <Image
-                      src={ingredient.image || "/placeholder.svg"}
-                      alt={ingredient.name}
-                      width={40}
-                      height={40}
-                      className="rounded-md object-cover"
-                    />
+                    <span className="flex-1 text-sm">{ingredient.food}</span>
                   </div>
                 ))}
               </div>
@@ -240,7 +218,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onToggle, onUpdate }) => {
                 {key}
               </div>
               <div className="text-xl font-bold">
-                {value}
+                {Math.round(value)}
                 {key !== "calories" && "g"}
               </div>
             </div>
