@@ -2,17 +2,17 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import MealCard from "@/components/MealCard";
 import { createWeeklyPlan } from "@/app/api/requests/auth";
 import { WeeklyPlanResponse, Meal } from "@/types/WeeklyPlan";
 
 export default function MealPlan() {
-  const [isImperial, setIsImperial] = React.useState(false);
-  const [isCooked, setIsCooked] = React.useState(false);
-  const [isHighCarbDay, setIsHighCarbDay] = React.useState(true);
-  const [calories, setCalories] = React.useState(0);
-  const [highCarbDays, setHighCarbDays] = React.useState<{
+  const [isImperial, setIsImperial] = useState(false);
+  const [isCooked, setIsCooked] = useState(false);
+  const [isHighCarbDay, setIsHighCarbDay] = useState(true);
+  const [calories, setCalories] = useState(0);
+  const [highCarbDays, setHighCarbDays] = useState<{
     breakfast_options: Meal[];
     lunch_options: Meal[];
     dinner_options: Meal[];
@@ -23,7 +23,7 @@ export default function MealPlan() {
     dinner_options: [],
     snacks: [],
   });
-  const [lowCardDays, setLowCardDays] = React.useState<{
+  const [lowCardDays, setLowCardDays] = useState<{
     breakfast_options: Meal[];
     lunch_options: Meal[];
     dinner_options: Meal[];
@@ -34,7 +34,7 @@ export default function MealPlan() {
     dinner_options: [],
     snacks: [],
   });
-  const [macros, setMacros] = React.useState({
+  const [macros, setMacros] = useState({
     highCarb: {
       protein: 0,
       fat: 0,

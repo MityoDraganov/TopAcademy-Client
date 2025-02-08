@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check, Utensils } from "lucide-react";
 import Image from "next/image";
-import React from "react";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -15,7 +14,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Meal, Ingredient } from "@/types/WeeklyPlan";
+import { Meal } from "@/types/WeeklyPlan";
+import { useEffect } from "react";
+import { useState } from "react";
 
 interface MealCardProps {
   meal: Meal;
@@ -32,12 +33,12 @@ const MealCard: React.FC<MealCardProps> = ({
   onUpdate,
   onSwitch,
 }) => {
-  const [ingredients, setIngredients] = React.useState(meal.ingredients);
-  const [sides, setSides] = React.useState(meal.sides || []);
-  const [selectedMeal, setSelectedMeal] = React.useState<Meal | null>(null);
-  const [showAllIngredients, setShowAllIngredients] = React.useState(false);
+  const [ingredients, setIngredients] = useState(meal.ingredients);
+  const [sides, setSides] = useState(meal.sides || []);
+  const [selectedMeal, setSelectedMeal] = useState<Meal | null>(null);
+  const [showAllIngredients, setShowAllIngredients] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setIngredients(meal.ingredients);
     setSides(meal.sides || []);
   }, [meal]);
