@@ -5,22 +5,9 @@ import { Switch } from "@/components/ui/switch";
 import React, { useEffect } from "react";
 import MealCard from "@/components/MealCard";
 import { createWeeklyPlan } from "@/app/api/requests/auth";
-import { useSession } from "@clerk/nextjs";
 import { WeeklyPlanResponse, Meal } from "@/types/WeeklyPlan";
 
-interface DayType {
-  name: string;
-  active: boolean;
-  description: string;
-}
-
-interface Macro {
-  label: string;
-  value: string;
-}
-
 export default function MealPlan() {
-  const { session, isLoaded } = useSession();
   const [isImperial, setIsImperial] = React.useState(false);
   const [isCooked, setIsCooked] = React.useState(false);
   const [isHighCarbDay, setIsHighCarbDay] = React.useState(true);
@@ -59,27 +46,15 @@ export default function MealPlan() {
       carbs: 0,
     },
   });
-
-  console.log("Low Carb Days", lowCardDays);
-  console.log("High Carb Days", highCarbDays);
   useEffect(() => {
     const fetchMealPlan = async () => {
-      if (!isLoaded || !session) {
-        console.log("Session not ready or user not signed in");
-        return;
-      }
-
       try {
         console.log("Fetching meal plan...");
-        const response =
-          (await createWeeklyPlan()) as WeeklyPlanResponse | null;
-        console.log("Response", response);
+        const response = await createWeeklyPlan() as WeeklyPlanResponse;
         if (!response) {
           console.error("No response received from createWeeklyPlan");
           return;
         }
-
-        console.log("Received meal plan response:", response);
 
         setHighCarbDays({
           breakfast_options: response.high_carb_days.breakfast_options,
@@ -93,7 +68,7 @@ export default function MealPlan() {
           dinner_options: response.low_carb_days?.dinner_options || [],
           snacks: response.low_carb_days?.snacks || [],
         });
-        setCalories(response.calories);
+        setCalories(response.daily_calories);
         setMacros({
           highCarb: response.high_carb_day_macros,
           lowCarb: response.low_carb_day_macros,
@@ -108,7 +83,7 @@ export default function MealPlan() {
 
     console.log("Setting up meal plan fetch...");
     fetchMealPlan();
-  }, [isLoaded, session]);
+  }, []);
 
   const handleMealToggle = (
     mealIndex: number,
@@ -157,6 +132,31 @@ export default function MealPlan() {
         [type]: prev[type as keyof typeof prev].map(
           (meal: Meal, index: number) =>
             index === mealIndex ? updatedMeal : meal
+        ),
+      }));
+    }
+  };
+
+  const handleMealSwitch = (
+    mealIndex: number,
+    newMeal: Meal,
+    type: string,
+    isHighCarb: boolean
+  ) => {
+    if (isHighCarb) {
+      setHighCarbDays((prev: typeof highCarbDays) => ({
+        ...prev,
+        [type]: prev[type as keyof typeof prev].map(
+          (meal: Meal, index: number) =>
+            index === mealIndex ? newMeal : meal
+        ),
+      }));
+    } else {
+      setLowCardDays((prev: typeof lowCardDays) => ({
+        ...prev,
+        [type]: prev[type as keyof typeof prev].map(
+          (meal: Meal, index: number) =>
+            index === mealIndex ? newMeal : meal
         ),
       }));
     }
@@ -305,6 +305,7 @@ export default function MealPlan() {
                     (isHighCarbDay ? highCarbDays : lowCardDays)
                       .breakfast_options[0]
                   }
+                  mealOptions={(isHighCarbDay ? highCarbDays : lowCardDays).breakfast_options}
                   onToggle={() =>
                     handleMealToggle(0, "breakfast_options", isHighCarbDay)
                   }
@@ -312,6 +313,14 @@ export default function MealPlan() {
                     handleMealUpdate(
                       0,
                       updatedMeal,
+                      "breakfast_options",
+                      isHighCarbDay
+                    )
+                  }
+                  onSwitch={(newMeal) =>
+                    handleMealSwitch(
+                      0,
+                      newMeal,
                       "breakfast_options",
                       isHighCarbDay
                     )
@@ -329,6 +338,7 @@ export default function MealPlan() {
                     (isHighCarbDay ? highCarbDays : lowCardDays)
                       .lunch_options[0]
                   }
+                  mealOptions={(isHighCarbDay ? highCarbDays : lowCardDays).lunch_options}
                   onToggle={() =>
                     handleMealToggle(0, "lunch_options", isHighCarbDay)
                   }
@@ -336,6 +346,14 @@ export default function MealPlan() {
                     handleMealUpdate(
                       0,
                       updatedMeal,
+                      "lunch_options",
+                      isHighCarbDay
+                    )
+                  }
+                  onSwitch={(newMeal) =>
+                    handleMealSwitch(
+                      0,
+                      newMeal,
                       "lunch_options",
                       isHighCarbDay
                     )
@@ -353,6 +371,7 @@ export default function MealPlan() {
                     (isHighCarbDay ? highCarbDays : lowCardDays)
                       .dinner_options[0]
                   }
+                  mealOptions={(isHighCarbDay ? highCarbDays : lowCardDays).dinner_options}
                   onToggle={() =>
                     handleMealToggle(0, "dinner_options", isHighCarbDay)
                   }
@@ -360,6 +379,14 @@ export default function MealPlan() {
                     handleMealUpdate(
                       0,
                       updatedMeal,
+                      "dinner_options",
+                      isHighCarbDay
+                    )
+                  }
+                  onSwitch={(newMeal) =>
+                    handleMealSwitch(
+                      0,
+                      newMeal,
                       "dinner_options",
                       isHighCarbDay
                     )
@@ -374,9 +401,18 @@ export default function MealPlan() {
                 <h2 className="text-2xl font-semibold mb-4">Snack</h2>
                 <MealCard
                   meal={(isHighCarbDay ? highCarbDays : lowCardDays).snacks[0]}
+                  mealOptions={(isHighCarbDay ? highCarbDays : lowCardDays).snacks}
                   onToggle={() => handleMealToggle(0, "snacks", isHighCarbDay)}
                   onUpdate={(updatedMeal) =>
                     handleMealUpdate(0, updatedMeal, "snacks", isHighCarbDay)
+                  }
+                  onSwitch={(newMeal) =>
+                    handleMealSwitch(
+                      0,
+                      newMeal,
+                      "snacks",
+                      isHighCarbDay
+                    )
                   }
                 />
               </div>

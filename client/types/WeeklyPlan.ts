@@ -21,7 +21,7 @@ export interface WeeklyPlanResponse {
     fat: number;
     carbs: number;
   };
-  calories: number;
+  daily_calories: number;
 }
 
 export interface Ingredient {
@@ -30,7 +30,6 @@ export interface Ingredient {
 }
 
 export interface Meal {
-  type: string;
   label: string;
   image: string;
   alt?: string;
