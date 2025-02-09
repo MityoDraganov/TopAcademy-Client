@@ -84,7 +84,7 @@ const MealCard: React.FC<MealCardProps> = ({
           />
           <div className="flex-1 text-center sm:text-left">
             <div className="text-sm font-medium text-gray-500">
-              {meal.mealType[0]}
+              {meal.dishType[0]}
             </div>
             <div className="text-lg font-semibold">{meal.label}</div>
           </div>
@@ -104,7 +104,7 @@ const MealCard: React.FC<MealCardProps> = ({
               <DialogContent className="sm:max-w-[425px] md:max-w-[600px] lg:max-w-[700px] p-6">
                 <DialogHeader>
                   <DialogTitle className="text-2xl font-bold tracking-tight text-destructive">
-                    Select Your {meal.mealType[0].toUpperCase()}
+                    Select Your {meal.dishType[0].toUpperCase()}
                   </DialogTitle>
                 </DialogHeader>
 

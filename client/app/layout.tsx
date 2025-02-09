@@ -45,11 +45,12 @@ export default function RootLayout({
 						theme="dark"
 						transition={Bounce}
 					/>
-					<SignedIn>
+					{/* <SignedIn> */}
 						<Header />
 						<Footer />
-					</SignedIn>
+					{/* </SignedIn> */}
 					<div id='clerk-captcha' /> 
+					{/* </SignedIn> */}
 					{children}
 				</ClerkProvider>
 			</body>

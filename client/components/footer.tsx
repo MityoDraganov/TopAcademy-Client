@@ -33,7 +33,7 @@ export default function Footer() {
 				</Button>
 			</Link>
 
-			<Link href="/meal-plan">
+			<Link href="/mealPlan">
 				<Button
 					variant="ghost"
 					size="icon"
