@@ -52,9 +52,9 @@ export default function MealPlan() {
           <div className="flex flex-col items-center justify-center gap-2 text-gray-600">
             <p>(Your Meal Plan & Macros are due to Update in 7 Days)</p>
             <button
-              onClick={() => setIsHighCarbDay(!isHighCarbDay)}
-              className="mt-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
-            >
+                onClick={() => setIsHighCarbDay(!isHighCarbDay)} // Toggled to High Carb day
+                className="mt-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
+              >
               {isHighCarbDay ? "Switch to Low Carb Day" : "Switch to High Carb Day"}
             </button>
           </div>

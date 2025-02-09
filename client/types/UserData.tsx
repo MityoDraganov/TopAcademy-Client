@@ -38,12 +38,17 @@ export interface UserRegisterFormData {
     confirmPassword: string
   }
 
+  export type UserUpdateData = Omit<UserRegisterFormDataModified, 'password' | 'confirmPassword'> & {
+    password?: string;
+    confirmPassword?: string;
+  }
 
-  
   export interface UserLoginFormData {
     email: string
     password: string
   }
+
+
   
   
   

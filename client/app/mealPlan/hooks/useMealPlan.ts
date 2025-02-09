@@ -62,18 +62,25 @@ export const useMealPlan = () => {
     type: keyof MealOptions,
     meal?: Meal
   ) => {
+    const currentState = isHighCarbDay ? highCarbDays : lowCardDays;
     const setter = isHighCarbDay ? setHighCarbDays : setLowCardDays;
     
-    setter(prev => ({
-      ...prev,
-      [type]: prev[type].map((m, i) => 
+    const updatedMeals = {
+      ...currentState,
+      [type]: currentState[type].map((m, i) => 
         i === mealIndex 
           ? actionType === 'toggle' 
             ? { ...m, selected: !m.selected }
             : meal || m
           : m
       ),
-    }));
+    };
+    
+    setter(updatedMeals);
+  };
+
+  const handleDaySwitch = () => {
+    setIsHighCarbDay((prev) => !prev);
   };
 
   return {
@@ -82,7 +89,7 @@ export const useMealPlan = () => {
     isCooked,
     setIsCooked,
     isHighCarbDay,
-    setIsHighCarbDay,
+    setIsHighCarbDay: handleDaySwitch,
     calories,
     macros,
     highCarbDays,
