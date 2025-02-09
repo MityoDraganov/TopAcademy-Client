@@ -88,15 +88,15 @@ export default function PhysicalDetails() {
 			</div>
 			<div>
 				<Label className="text-sm font-medium text-gray-700">
-					Gender
+					Legal Sex (for official purposes)
 				</Label>
 				<RadioGroup
 					value={formData.gender}
 					onValueChange={(value) => updateForm("gender", value)} // Use onValueChange instead of onChange
-					className="gap-4 mt-2 w-full grid grid-cols-3"
+					className="gap-4 mt-2 w-full grid grid-cols-2"
 					
 				>
-					{["male", "female", "other"].map((gender) => (
+					{["male", "female"].map((gender) => (
 						<div key={gender} className="flex items-center">
 							<RadioGroupItem
 								value={gender}
