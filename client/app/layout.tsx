@@ -19,6 +19,8 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
+	
+
 	return (
 		<html lang="en">
 			<body
@@ -47,6 +49,7 @@ export default function RootLayout({
 						<Header />
 						<Footer />
 					</SignedIn>
+					<div id='clerk-captcha' /> 
 					{children}
 				</ClerkProvider>
 			</body>

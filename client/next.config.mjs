@@ -7,6 +7,7 @@ const nextConfig = {
 			"edamam-product-images.s3.amazonaws.com",
 		],
 	},
+	reactStrictMode: false,
 };
 
 export default nextConfig;
