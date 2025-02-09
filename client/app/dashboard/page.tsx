@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card"
-import { CalendarDays, Dumbbell, Goal, Salad, TrendingUp, Utensils } from "lucide-react"
+import { Dumbbell, Goal, TrendingUp, Utensils } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { MealPlan } from "./components/MealPlan"

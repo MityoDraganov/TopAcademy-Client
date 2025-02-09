@@ -4,9 +4,19 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Progress } from "@/components/ui/progress";
+import {
+	Drawer,
+	DrawerContent,
+	DrawerHeader,
+	DrawerTitle,
+	DrawerTrigger,
+} from "@/components/ui/drawer";
 import { exportShoppingListToPDF } from "@/lib/exportPdf";
-import { FileDown, ShoppingCart } from "lucide-react";
+import { FileDown, PlusCircle } from "lucide-react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import AddItemForm from "./components/AddItemForm";
 
 interface ShoppingItem {
 	id: string;
@@ -17,17 +27,18 @@ interface ShoppingItem {
 }
 
 const categories = {
-	Proteins: "bg-red-100 text-red-700",
-	Vegetables: "bg-green-100 text-green-700",
-	Fruits: "bg-orange-100 text-orange-700",
-	Grains: "bg-yellow-100 text-yellow-700",
-	Dairy: "bg-blue-100 text-blue-700",
-	Pantry: "bg-purple-100 text-purple-700",
+	Proteins: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+	Vegetables:
+		"bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+	Fruits: "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300",
+	Grains: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+	Dairy: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+	Pantry: "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300",
 } as const;
 
-type Category = keyof typeof categories;
+export type Category = keyof typeof categories;
 
-export default function shoppingList() {
+export default function ShoppingList() {
 	const [items, setItems] = useState<ShoppingItem[]>([
 		{
 			id: "1",
@@ -86,12 +97,44 @@ export default function shoppingList() {
 			quantity: "1L",
 		},
 	]);
+
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+	const [newItem, setNewItem] = useState<ShoppingItem>({
+		id: "",
+		name: "",
+		completed: false,
+		category: "Pantry",
+		quantity: "",
+	});
+
 	const toggleItem = (id: string) => {
 		setItems(
 			items.map((item) =>
 				item.id === id ? { ...item, completed: !item.completed } : item
 			)
 		);
+	};
+
+	const addItem = (e: React.FormEvent) => {
+		e.preventDefault();
+		if (newItem.name.trim()) {
+			const newItemData: ShoppingItem = {
+				id: (items.length + 1).toString(),
+				name: newItem.name.trim(),
+				completed: false,
+				category: newItem.category,
+				quantity: newItem.quantity || "1",
+			};
+			setItems([...items, newItemData]);
+			setNewItem({
+				id: "",
+				name: "",
+				completed: false,
+				category: "Pantry",
+				quantity: "",
+			});
+		}
 	};
 
 	const completedCount = items.filter((item) => item.completed).length;
@@ -106,76 +149,157 @@ export default function shoppingList() {
 	}, {} as Record<string, ShoppingItem[]>);
 
 	const handleExport = () => {
-		exportShoppingListToPDF(items); // Pass your shopping list items
+		exportShoppingListToPDF(items);
 	};
 
 	return (
-		<div className="flex flex-col h-screen gap-4 p-4">
-			<div className="flex items-center gap-4 text-primary">
-				<ShoppingCart className="w-6 h-6" />
-				<h1 className="text-xl font-semibold">Shopping List</h1>
-			</div>
+		<div
+			className={`flex flex-col min-h-screen items-center transition-colors duration-300`}
+		>
+			<div className="w-full max-w-4xl flex flex-col h-full gap-6 p-4 md:p-6">
+				<header className="flex items-center justify-between">
+					<div className="flex items-center gap-4">
+						<Button
+							className="bg-primary-foreground text-primary border border-primary/50 flex items-center gap-2 hover:bg-primary hover:text-primary-foreground transition-colors"
+							onClick={handleExport}
+						>
+							<FileDown className="w-5 h-5" />
+							<span className="inline">Export PDF</span>
+						</Button>
+					</div>
+				</header>
 
-			<Button className="w-fit bg-primary-foreground text-primary border border-primary/50 flex items-center gap-2" onClick={handleExport}>
-				<FileDown className="w-5 h-5"/>
-				<span>Export to PDF</span>
-			</Button>
+				<Card className="p-4 flex flex-col gap-4">
+					<div className="flex justify-between items-center mb-2">
+						<span className="text-sm font-medium dark:text-gray-300">
+							Progress: {completedCount} of {items.length} items
+						</span>
+						<span className="text-sm font-medium dark:text-gray-300">
+							{Math.round(progress)}%
+						</span>
+					</div>
+					<Progress value={progress} className="w-full" />
 
-			<div className="flex-1 px-4 overflow-y-auto">
-				<div className="max-w-2xl mx-auto py-4 space-y-6 h-fit pb-[30dvh]">
-					{Object.entries(groupedItems).map(
-						([category, categoryItems]) => (
-							<div key={category} className="space-y-3">
-								<div className="flex items-center justify-between">
-									<h3 className="font-medium text-gray-600">
-										{category}
-									</h3>
-									<Badge
-										variant="secondary"
-										className={
-											categories[category as Category]
-										}
-									>
-										{categoryItems.length} items
-									</Badge>
-								</div>
-								<div className="space-y-2">
-									{categoryItems.map((item) => (
-										<Card
-											key={item.id}
-											className={`transition-all ${
-												item.completed
-													? "opacity-60"
-													: ""
-											}`}
-											onClick={() => toggleItem(item.id)}
+					<div className="flex flex-col gap-2">
+						<h2 className="text-lg font-semibold dark:text-gray-300">
+							Summary
+						</h2>
+						<div className="flex gap-[5%]">
+							<p className="text-sm dark:text-gray-400">
+								Total Items: {items.length}
+							</p>
+							<p className="text-sm dark:text-gray-400">
+								Completed: {completedCount}
+							</p>
+							<p className="text-sm dark:text-gray-400">
+								Remaining: {items.length - completedCount}
+							</p>
+						</div>
+					</div>
+				</Card>
+
+				<div className="flex-1 overflow-y-auto w-full">
+					<div className="space-y-6 pb-24">
+						{Object.entries(groupedItems).map(
+							([category, categoryItems]) => (
+								<div key={category}>
+									<div className="flex items-center justify-between mb-2">
+										<h3 className="font-medium text-gray-600 dark:text-gray-400">
+											{category}
+										</h3>
+										<Badge
+											variant="secondary"
+											className={
+												categories[category as Category]
+											}
 										>
-											<div className="flex items-center gap-3 p-4">
-												<Checkbox
-													checked={item.completed}
-													className="h-5 w-5"
-												/>
-												<div className="flex-1 flex justify-between items-center">
-													<span
-														className={`${
-															item.completed
-																? "line-through text-gray-400"
-																: ""
-														}`}
-													>
-														{item.name}
-													</span>
-													<span className="text-sm text-gray-500">
-														{item.quantity}
-													</span>
-												</div>
-											</div>
-										</Card>
-									))}
+											{categoryItems.length} items
+										</Badge>
+									</div>
+									<AnimatePresence>
+										{categoryItems.map((item) => (
+											<motion.div
+												key={item.id}
+												initial={{ opacity: 0, y: 20 }}
+												animate={{ opacity: 1, y: 0 }}
+												exit={{ opacity: 0, y: -20 }}
+												transition={{ duration: 0.2 }}
+											>
+												<Card
+													className={`mb-2 transition-all duration-300 transform w-[95%] mx-auto hover:scale-[1.02] ${
+														item.completed
+															? "opacity-60"
+															: ""
+													}`}
+													onClick={() =>
+														toggleItem(item.id)
+													}
+												>
+													<div className="flex items-center gap-3 p-4">
+														<Checkbox
+															checked={
+																item.completed
+															}
+															className="h-5 w-5"
+														/>
+														<div className="flex-1 flex justify-between items-center">
+															<span
+																className={`${
+																	item.completed
+																		? "line-through text-gray-400 dark:text-gray-600"
+																		: "dark:text-gray-300"
+																}`}
+															>
+																{item.name}
+															</span>
+															<span className="text-sm text-gray-500 dark:text-gray-400">
+																{item.quantity}
+															</span>
+														</div>
+													</div>
+												</Card>
+											</motion.div>
+										))}
+									</AnimatePresence>
 								</div>
+							)
+						)}
+					</div>
+				</div>
+
+				<Card className="hidden md:sticky bottom-4 p-4 bg-white dark:bg-gray-800 shadow-lg">
+					<AddItemForm
+						addItem={addItem}
+						categories={categories}
+						newItem={newItem}
+						setNewItem={setNewItem}
+					/>
+				</Card>
+
+				<div className="md:hidden fixed bottom-4 right-4">
+					<Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+						<DrawerTrigger asChild>
+							<Button
+								size="icon"
+								className="rounded-full h-14 w-14 shadow-lg"
+							>
+								<PlusCircle className="h-6 w-6" />
+							</Button>
+						</DrawerTrigger>
+						<DrawerContent>
+							<DrawerHeader>
+								<DrawerTitle>Add New Item</DrawerTitle>
+							</DrawerHeader>
+							<div className="p-4">
+								<AddItemForm
+									addItem={addItem}
+									categories={categories}
+									newItem={newItem}
+									setNewItem={setNewItem}
+								/>
 							</div>
-						)
-					)}
+						</DrawerContent>
+					</Drawer>
 				</div>
 			</div>
 		</div>
