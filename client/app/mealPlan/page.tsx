@@ -61,7 +61,7 @@ export default function MealPlan() {
         </div>
 
         {/* Macros Section */}
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-4 md:grid-cols-4 gap-4 mb-8">
           <MacroCard value={calories} label="Calories" />
           <MacroCard value={`${Math.round(currentMacros.protein)}g`} label="Protein" />
           <MacroCard value={`${Math.round(currentMacros.fat)}g`} label="Fat" />
@@ -69,7 +69,7 @@ export default function MealPlan() {
         </div>
 
         {/* Settings Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <SettingToggle
             label="Measurement Type"
             leftLabel="Metric"
@@ -84,7 +84,7 @@ export default function MealPlan() {
             checked={isCooked}
             onCheckedChange={setIsCooked}
           />
-        </div>
+        </div> */}
 
         {/* Meal Plan */}
         <div className="space-y-6">
