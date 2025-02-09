@@ -147,7 +147,7 @@ export default function RegisterPage() {
 									className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 text-sm font-medium
                     ${
 						index <= currentStep
-							? "bg-blue-500 text-white"
+							? "bg-primary text-white"
 							: "bg-gray-200 text-gray-500"
 					}`}
 								>
@@ -156,7 +156,7 @@ export default function RegisterPage() {
 								<span
 									className={`text-xs ${
 										index <= currentStep
-											? "text-blue-500"
+											? "text-primary"
 											: "text-gray-500"
 									}`}
 								>
@@ -216,7 +216,7 @@ export default function RegisterPage() {
 							variant="outline"
 							onClick={() => setCurrentStep((prev) => prev - 1)}
 							disabled={currentStep === 0}
-							className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+							className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
 						>
 							<ChevronLeft className="w-4 h-4 mr-2" />
 							Previous
@@ -225,7 +225,7 @@ export default function RegisterPage() {
 						{currentStep >= steps.length - 1 ? (
 							<Button
 								type="submit"
-								className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+								className="px-4 py-2 text-sm font-medium text-white bg-primary/90 border border-transparent rounded-md shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
 							>
 								Complete
 							</Button>
@@ -235,7 +235,7 @@ export default function RegisterPage() {
 								onClick={() =>
 									setCurrentStep((prev) => prev + 1)
 								}
-								className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+								className="px-4 py-2 text-sm font-medium text-white bg-primary/90 border border-transparent rounded-md shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:rind-primary"
 							>
 								Next
 								<ChevronRight className="w-4 h-4 ml-2" />
