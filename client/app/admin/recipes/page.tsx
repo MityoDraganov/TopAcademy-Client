@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,20 +14,40 @@ import {
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
+	CardDescription,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Loader2, Plus, Trash2 } from "lucide-react";
-import { Ingredient, Recipe } from "@/types/Recepie";
-import { createRecipe } from "@/app/api/requests/recipies";
+import { Ingredient } from "@/types/Recepie";
+import IngridientInput from "./components/IngridientInput";
+import { createRecipe, getIngredients } from "@/app/api/requests/recipies";
+import LabelsInput from "./components/LabelsInput";
+
+interface Macros {
+	fat: number;
+	carbs: number;
+	protein: number;
+}
+
+interface Recipe {
+	label: string;
+	image: string;
+	ingredients: Ingredient[];
+	calories: number;
+	macros: Macros;
+	mealType: "breakfast" | "lunch" | "dinner" | "snack" | "brunch";
+	labels: string[];
+	servings: number;
+	prepTime: number; // in minutes
+	instructions: string;
+}
 
 export default function AdminRecipesPage() {
 	const [recipe, setRecipe] = useState<Recipe>({
 		label: "",
 		image: "",
-		ingredients: [{ food: "", weight: 0 }],
+		ingredients: [{ name: "", weight: 0 }],
 		calories: 0,
 		macros: { fat: 0, carbs: 0, protein: 0 },
 		mealType: "snack",
@@ -41,6 +61,22 @@ export default function AdminRecipesPage() {
 		{}
 	);
 
+	const [ingridients, setIngridients] = useState<Ingredient[]>([]);
+
+	useEffect(() => {
+		(async () => {
+			const data = await getIngredients();
+			setIngridients(data);
+		})();
+	}, []);
+
+	const [showSuggestions, setShowSuggestions] = useState(false);
+	const [suggestions, setSuggestions] = useState<Ingredient[]>([]);
+	const [focusedIngredientIndex, setFocusedIngredientIndex] = useState<
+		number | null
+	>(null);
+	const suggestionRefs = useRef<(HTMLDivElement | null)[]>([]);
+
 	const updateRecipe = (field: keyof Recipe, value: any) => {
 		setRecipe((prev) => ({ ...prev, [field]: value }));
 		setErrors((prev) => ({ ...prev, [field]: "" }));
@@ -49,7 +85,7 @@ export default function AdminRecipesPage() {
 	const addIngredient = () => {
 		setRecipe((prev) => ({
 			...prev,
-			ingredients: [...prev.ingredients, { food: "", weight: 0 }],
+			ingredients: [...prev.ingredients, { name: "", weight: 0 }],
 		}));
 	};
 
@@ -77,8 +113,6 @@ export default function AdminRecipesPage() {
 			newErrors.ingredients = "At least one ingredient is required";
 		if (recipe.calories <= 0)
 			newErrors.calories = "Calories must be a positive number";
-		if (recipe.labels.length === 0)
-			newErrors.labels = "At least one label is required";
 		if (recipe.servings <= 0)
 			newErrors.servings = "Servings must be a positive number";
 		if (recipe.prepTime <= 0)
@@ -92,33 +126,66 @@ export default function AdminRecipesPage() {
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		try {
-			if (!validateForm()) return;
+		if (!validateForm()) return;
 
-			setIsSubmitting(true);
-			// Here you would typically send the data to your API
-			console.log(recipe);
-			const response = await createRecipe(recipe);
-            console.log(response);
+		setIsSubmitting(true);
+		// Here you would typically send the data to your API
+		console.log(recipe);
+		await createRecipe(recipe);
+		setIsSubmitting(false);
+		setRecipe({
+			label: "",
+			image: "",
+			ingredients: [{ name: "", weight: 0 }],
+			calories: 0,
+			macros: { fat: 0, carbs: 0, protein: 0 },
+			mealType: "snack",
+			labels: [],
+			servings: 1,
+			prepTime: 0,
+			instructions: "",
+		});
+	};
 
-			setIsSubmitting(false);
-			setRecipe({
-				label: "",
-				image: "",
-				ingredients: [{ food: "", weight: 0 }],
-				calories: 0,
-				macros: { fat: 0, carbs: 0, protein: 0 },
-				mealType: "snack",
-				labels: [],
-				servings: 1,
-				prepTime: 0,
-				instructions: "",
-			});
-		} catch (e) {
-			console.log(e);
-			setIsSubmitting(false);
+	const filterSuggestions = (value: string) => {
+		const filtered = ingridients.filter((ingredient) =>
+			ingredient.name.toLowerCase().includes(value.toLowerCase())
+		);
+		setSuggestions(filtered);
+		setShowSuggestions(filtered.length > 0);
+	};
+
+	const handleIngredientChange = (index: number, value: string) => {
+		updateIngredient(index, "name", value);
+		filterSuggestions(value);
+		setFocusedIngredientIndex(index);
+	};
+
+	const handleSuggestionClick = (suggestion: Ingredient) => {
+		if (focusedIngredientIndex !== null) {
+			const newIngredients = [...recipe.ingredients];
+			newIngredients[focusedIngredientIndex] = { ...suggestion }; // Update entire object
+			updateRecipe("ingredients", newIngredients);
+			setShowSuggestions(false);
 		}
 	};
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				suggestionRefs.current.every(
+					(ref) => ref && !ref.contains(event.target as Node)
+				)
+			) {
+				setShowSuggestions(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
 
 	return (
 		<div className="h-screen pt-2 pb-10 overflow-y-auto">
@@ -174,21 +241,27 @@ export default function AdminRecipesPage() {
 							{recipe.ingredients.map((ingredient, index) => (
 								<div
 									key={index}
-									className="flex items-end gap-4 mt-2"
+									className="flex items-end gap-4 mt-2 relative"
 								>
-									<div className="flex-grow">
-										<Input
-											placeholder="Ingredient name"
-											value={ingredient.food}
-											onChange={(e) =>
-												updateIngredient(
-													index,
-													"food",
-													e.target.value
-												)
-											}
-										/>
-									</div>
+									<IngridientInput
+										ingredient={ingredient}
+										index={index}
+										handleIngredientChange={
+											handleIngredientChange
+										}
+										setFocusedIngredientIndex={
+											setFocusedIngredientIndex
+										}
+										showSuggestions={showSuggestions}
+										focusedIngredientIndex={
+											focusedIngredientIndex
+										}
+										suggestions={suggestions}
+										handleSuggestionClick={
+											handleSuggestionClick
+										}
+										suggestionRefs={suggestionRefs}
+									/>
 									<div>
 										<Input
 											type="number"
@@ -391,38 +464,15 @@ export default function AdminRecipesPage() {
 						</div>
 
 						<div>
-							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+							<label className="block text-sm font-medium mb-1">
 								Labels
 							</label>
-							<Textarea
-								placeholder="Enter labels separated by commas (e.g., healthy, fruit, quick)"
-								value={recipe.labels.join(", ")}
-								onChange={(
-									e: React.ChangeEvent<HTMLTextAreaElement>
-								) => {
-									const labels = e.target.value
-										.split(",")
-										.map((label: string) => label.trim())
-										.filter(Boolean);
-									updateRecipe("labels", labels);
-								}}
+							<LabelsInput
+								labels={recipe.labels}
+								setLabels={(labels) =>
+									updateRecipe("labels", labels)
+								}
 							/>
-							<div className="mt-2">
-								{recipe.labels.map((label, index) => (
-									<Badge
-										key={index}
-										variant="secondary"
-										className="mr-2 mb-2"
-									>
-										{label}
-									</Badge>
-								))}
-							</div>
-							{errors.labels && (
-								<p className="mt-1 text-sm text-red-600">
-									{errors.labels}
-								</p>
-							)}
 						</div>
 
 						<Button
