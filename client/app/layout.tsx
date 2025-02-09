@@ -21,7 +21,7 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body
-                className={`${inter.className} h-screen flex flex-col overflow-hidden`}
+                className={`${inter.className} h-screen flex flex-col overflow-hidden bg-pink-50 `}
             >
                 <ClerkProvider
                     publishableKey={
