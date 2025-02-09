@@ -15,7 +15,6 @@ import { showSuccess } from "@/components/toast";
 const dietaryOptions: [string, string][] = [
   ["none", "No Preference"],
   ["vegetarian", "Vegetarian"],
-
   ["vegan", "Vegan"],
   ["pescatarian", "Pescatarian"],
   ["keto", "Keto"],
@@ -37,6 +36,15 @@ const activityLevels: [string, string][] = [
   ["extremely_active", "Extremely Active (physical job or 2x training)"],
 ];
 
+const healthConditions: [string, string][] = [
+  ["none", "No Health Conditions"],
+  ["hypertension", "Hypertension"],
+  ["pcos", "Polycystic ovary syndrome"],
+  ["ibs", "Irritable bowel syndrome"],
+  ["celiac_disease", "Celiac Disease"],
+  ["ckd", "Chronic Kidney Disease"],
+];
+
 export default function Settings() {
   const [formData, setFormData] = useState({
     dietary: "none",
@@ -48,7 +56,8 @@ export default function Settings() {
     height: 0,
     weight: 0,
     gender: "",
-	age: 0
+    age: 0,
+    healthCondition: "none"
   });
 
 
@@ -70,7 +79,8 @@ export default function Settings() {
             height: userDetails.height,
             weight: userDetails.weight,
             dietary: userDetails.dietary_preference,
-			age: userDetails.age
+            age: userDetails.age,
+            healthCondition: userDetails.health_condition
           }));
         }
       }
@@ -103,7 +113,7 @@ export default function Settings() {
         height: formData.height,
         weight: formData.weight,
         gender: formData.gender as "male" | "female" | "other",
-
+        health_condition: formData.healthCondition as "none" | "hypertension" | "pcos" | "ibs" | "celiac_disease" | "ckd",
         goal: formData.healthGoal as "lose_weight" | "maintain_weight" | "gain_weight" | "build_muscle",
         activity_level: formData.activityLevel as "sedentary" | "lightly_active" | "moderately_active" | "very_active" | "extremely_active",
         dietary_preference: formData.dietary as "none" | "vegetarian" | "vegan" | "pescatarian" | "keto" | "paleo",
@@ -134,6 +144,7 @@ export default function Settings() {
           <DietaryPreferencesCard
             formData={formData}
             handleChange={handleChange}
+            healthConditions={healthConditions}
           />
           <HealthFitnessCard
             formData={formData}

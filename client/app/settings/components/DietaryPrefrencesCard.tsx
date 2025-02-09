@@ -9,8 +9,10 @@ interface DietaryPreferencesCardProps {
     allergies: string;
     excludedFood: string;
     mealsPerDay: number;
+    healthCondition: string;
   };
   handleChange: (field: string, value: string | number) => void;
+  healthConditions: [string, string][];
 }
 
 const dietaryOptions: [string, string][] = [
@@ -22,7 +24,7 @@ const dietaryOptions: [string, string][] = [
   ["paleo", "Paleo"],
 ]
 
-export function DietaryPreferencesCard({ formData, handleChange }: DietaryPreferencesCardProps) {
+export function DietaryPreferencesCard({ formData, handleChange, healthConditions }: DietaryPreferencesCardProps) {
   return (
     <Card className="shadow-lg">
       <CardHeader className="bg-gradient-to-r from-red-50 to-red-100 dark:from-red-950 dark:to-red-900">
@@ -42,6 +44,26 @@ export function DietaryPreferencesCard({ formData, handleChange }: DietaryPrefer
                     : "border-gray-200 hover:border-red-200 dark:border-gray-700 dark:hover:border-red-700"
                 )}
                 onClick={() => handleChange("dietary", value)}
+              >
+                <h3 className="font-medium text-sm">{label}</h3>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <Label className="text-base font-semibold">Health Conditions</Label>
+          <div className="grid grid-cols-2 gap-3">
+            {healthConditions.map(([value, label]) => (
+              <div
+                key={value}
+                className={cn(
+                  "cursor-pointer rounded-lg border-2 p-3 transition-all hover:shadow-md",
+                  formData.healthCondition === value
+                    ? "border-red-500 bg-red-50 dark:border-red-400 dark:bg-red-950"
+                    : "border-gray-200 hover:border-red-200 dark:border-gray-700 dark:hover:border-red-700"
+                )}
+                onClick={() => handleChange("healthCondition", value)}
               >
                 <h3 className="font-medium text-sm">{label}</h3>
               </div>
