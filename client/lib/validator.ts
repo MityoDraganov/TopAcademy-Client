@@ -1,4 +1,4 @@
-export function validateFields<T extends Record<string, any>>(data: T): string[] {
+export function validateFields<T extends Record<string, string | number>>(data: T): string[] {
     const errors: string[] = [];
   
     for (const key in data) {

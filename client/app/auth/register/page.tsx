@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import { validateFields } from "@/lib/validator";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/app/api/requests/auth";
 import Link from "next/link";
+import { UserRegisterFormDataModified } from "@/types/UserData";
 
 const steps = [
 	"Basic Info",
@@ -54,7 +55,7 @@ export default function RegisterPage() {
 			await signOut();
 		}
 		try {
-			const { allergies, excluded_foods, ...filteredFormData } = formData;
+			const { ...filteredFormData } = formData;
 			if (validateFields(filteredFormData).length > 0) {
 				showError("Please fill all fields");
 				return;
@@ -104,11 +105,12 @@ export default function RegisterPage() {
 					signUpAttempt.firstName &&
 					signUpAttempt.lastName
 				) {
-					const modifiedFormData = {
+					const modifiedFormData: UserRegisterFormDataModified = {
 						...formData,
 						clerk_id: signUpAttempt.createdUserId,
 						allergies: formData?.allergies.split(","),
 						excluded_foods: formData?.excluded_foods.split(","),
+						health_condition: "none"
 					};
 					await registerUser(modifiedFormData);
 				} else {

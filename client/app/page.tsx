@@ -93,7 +93,7 @@ export default function Home() {
 									Ready to Transform Your Nutrition?
 								</h2>
 								<p className="text-muted-foreground max-w-[600px]">
-									Join Top Academy's AI Meal Planner today and
+									Join Top Academy&apos;s AI Meal Planner today and
 									get personalized meal plans that help you
 									achieve your fitness goals.
 								</p>

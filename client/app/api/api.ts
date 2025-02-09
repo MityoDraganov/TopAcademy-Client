@@ -33,28 +33,63 @@ const request = async <T>({
 
 		if (type === "formData") {
 			const formData = new FormData();
+
 			Object.entries(data || {}).forEach(([key, value]) => {
-				if (
-					Array.isArray(value) &&
-					value.every((item) => item instanceof File)
-				) {
-					value.forEach((file) => formData.append(key, file));
+				if (value instanceof File) {
+					// If the value is a single File, append it directly
+					formData.append(key, value);
+				} else if (Array.isArray(value)) {
+					// Handle arrays
+					// 1. If the array is of Files:
+					if (value.every((item) => item instanceof File)) {
+						value.forEach((file: File) =>
+							formData.append(key, file)
+						);
+					}
+					// 2. If the array is of objects (e.g. Ingredient objects)
+					else if (
+						value.every(
+							(item) => typeof item === "object" && item !== null
+						)
+					) {
+						value.forEach((item, index) => {
+							Object.entries(item).forEach(
+								([subKey, subValue]) => {
+									// Append each property with an indexed key:
+									// e.g., "ingredients[0].name", "ingredients[0].weight"
+									formData.append(
+										`${key}[${index}].${subKey}`,
+										String(subValue)
+									);
+								}
+							);
+						});
+					}
+					// 3. If the array is of primitives (e.g. strings for labels)
+					else {
+						// Append each primitive value using the same key so that on the backend
+						// form.Value["labels"] is an array of strings.
+						value.forEach((item) =>
+							formData.append(key, String(item))
+						);
+					}
 				} else if (
 					typeof value === "object" &&
 					value !== null &&
 					!(value instanceof File)
 				) {
+					// For nested objects (that are not arrays or Files)
+					// If you need a special flattening (e.g. for macros), you could check the key here.
+					// For now, we'll use dot notation.
 					Object.entries(value).forEach(([subKey, subValue]) => {
-						const valueToAppend =
-							subValue instanceof Blob
-								? subValue
-								: String(subValue);
-						formData.append(subKey, valueToAppend);
+						formData.append(`${key}.${subKey}`, String(subValue));
 					});
 				} else {
+					// For primitives (strings, numbers, etc.)
 					formData.append(key, String(value));
 				}
 			});
+
 			config.data = formData;
 		} else {
 			config.headers = {

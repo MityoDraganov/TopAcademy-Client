@@ -51,7 +51,7 @@ export function exportShoppingListToPDF(items: ShoppingItem[]): void {
       headStyles: { fillColor: [0, 122, 255] },
     });
 
-    yOffset = (doc as any).lastAutoTable.finalY + 10;
+    yOffset = (doc as typeof doc & { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
   });
 
   doc.save("Shopping_List.pdf");

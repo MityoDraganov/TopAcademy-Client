@@ -10,6 +10,7 @@ export interface UserRegisterFormData {
     goal: "lose_weight" | "gain_weight" | "maintain_weight" | "build_muscle"
     activity_level: "sedentary" | "lightly_active" | "moderately_active" | "very_active" | "extremely_active"
     dietary_preference: "none" | "vegetarian" | "vegan" | "pescatarian" | "keto" | "paleo"
+    health_condition: "none" | "hypertension" | "pcos" | "ibs" | "celiac_disease" | "ckd"
     allergies: string
     excluded_foods: string
     meals_per_day: number

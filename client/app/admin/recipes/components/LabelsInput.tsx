@@ -1,4 +1,4 @@
-import { useState, useRef, MutableRefObject } from "react";
+import { useState} from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
@@ -30,12 +30,8 @@ export default function LabelsInput({
 }) {
 	const [inputValue, setInputValue] = useState("");
 	const [showSuggestions, setShowSuggestions] = useState(false);
-	const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>(
-		existingLabels
-	);
-	const suggestionRefs: MutableRefObject<(HTMLDivElement | null)[]> = useRef(
-		[]
-	);
+	const [filteredSuggestions, setFilteredSuggestions] =
+		useState<string[]>(existingLabels);
 
 	const handleInputChange = (value: string) => {
 		setInputValue(value);
@@ -77,7 +73,9 @@ export default function LabelsInput({
 					value={inputValue}
 					onChange={(e) => handleInputChange(e.target.value)}
 					onFocus={() => setShowSuggestions(true)}
-					onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+					onBlur={() =>
+						setTimeout(() => setShowSuggestions(false), 200)
+					}
 					onKeyDown={(e) => e.key === "Enter" && handleAddLabel()}
 				/>
 				{showSuggestions && (
@@ -90,7 +88,11 @@ export default function LabelsInput({
 									{filteredSuggestions.map((suggestion) => (
 										<CommandItem
 											key={suggestion}
-											onSelect={() => handleSuggestionClick(suggestion)}
+											onSelect={() =>
+												handleSuggestionClick(
+													suggestion
+												)
+											}
 										>
 											{suggestion}
 										</CommandItem>
@@ -103,10 +105,17 @@ export default function LabelsInput({
 			</div>
 			<div className="mt-2 flex flex-wrap gap-2">
 				{labels.map((label, index) => (
-					<div key={index} className="flex items-center py-1 rounded-full">
+					<div
+						key={index}
+						className="flex items-center py-1 rounded-full"
+					>
 						<Badge key={index} variant="secondary" className="mb-2">
 							{label}
-							<Button variant="ghost" size="icon" onClick={() => removeLabel(index)}>
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={() => removeLabel(index)}
+							>
 								<Trash2 className="h-4 w-4" />
 							</Button>
 						</Badge>

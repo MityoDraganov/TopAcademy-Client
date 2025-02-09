@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import type React from 'react'; // Import React
 import Header from '@/components/header';
-import { ClerkProvider, SignedIn } from '@clerk/nextjs';
+import { ClerkProvider } from '@clerk/nextjs';
 import { ToastContainer, Bounce } from 'react-toastify';
 
 const inter = Inter({ subsets: ['latin'] });

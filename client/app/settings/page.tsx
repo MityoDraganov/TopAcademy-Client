@@ -11,16 +11,6 @@ import { UserUpdateData } from "@/types/UserData";
 import { updateUser } from "../api/requests/auth";
 import { showSuccess } from "@/components/toast";
 
-
-const dietaryOptions: [string, string][] = [
-  ["none", "No Preference"],
-  ["vegetarian", "Vegetarian"],
-  ["vegan", "Vegan"],
-  ["pescatarian", "Pescatarian"],
-  ["keto", "Keto"],
-  ["paleo", "Paleo"],
-];
-
 const healthGoals: [string, string][] = [
   ["lose_weight", "Lose Weight"],
   ["gain_weight", "Gain Weight"],

@@ -1,4 +1,3 @@
-import ActivityTracker from "./components/ActivityTracker";
 import TodaysMeal from "./components/TodaysMeal";
 import TrackerHeader from "./components/TrackerHeader";
 

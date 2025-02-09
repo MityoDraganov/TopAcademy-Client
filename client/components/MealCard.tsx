@@ -29,7 +29,6 @@ interface MealCardProps {
 const MealCard: React.FC<MealCardProps> = ({
   meal,
   mealOptions,
-  onToggle,
   onUpdate,
   onSwitch,
 }) => {

@@ -2,7 +2,6 @@
 
 import MealCard from "@/components/MealCard";
 import { MacroCard } from "./components/MacroCard";
-import { SettingToggle } from "./components/SettingToggle";
 import { useMealPlan } from "./hooks/useMealPlan";
 import { MealOptions } from "./types";
 
@@ -48,10 +47,6 @@ const MacroCardSkeleton = () => (
 
 export default function MealPlan() {
   const {
-    isImperial,
-    setIsImperial,
-    isCooked,
-    setIsCooked,
     isHighCarbDay,
     setIsHighCarbDay,
     calories,

@@ -19,7 +19,7 @@ import {
 	CardDescription,
 } from "@/components/ui/card";
 import { Loader2, Plus, Trash2 } from "lucide-react";
-import { Ingredient } from "@/types/Recepie";
+import { Ingredient, Recipe } from "@/types/Recepie";
 import IngridientInput from "./components/IngridientInput";
 import { createRecipe, getIngredients } from "@/app/api/requests/recipies";
 import LabelsInput from "./components/LabelsInput";
@@ -30,23 +30,12 @@ interface Macros {
 	protein: number;
 }
 
-interface Recipe {
-	label: string;
-	image: string;
-	ingredients: Ingredient[];
-	calories: number;
-	macros: Macros;
-	mealType: "breakfast" | "lunch" | "dinner" | "snack" | "brunch";
-	labels: string[];
-	servings: number;
-	prepTime: number; // in minutes
-	instructions: string;
-}
+
 
 export default function AdminRecipesPage() {
 	const [recipe, setRecipe] = useState<Recipe>({
 		label: "",
-		image: "",
+		image: null,
 		ingredients: [{ name: "", weight: 0 }],
 		calories: 0,
 		macros: { fat: 0, carbs: 0, protein: 0 },
@@ -77,7 +66,22 @@ export default function AdminRecipesPage() {
 	>(null);
 	const suggestionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-	const updateRecipe = (field: keyof Recipe, value: any) => {
+	const updateRecipe = (
+		field: keyof Recipe,
+		value:
+			| string
+			| number
+			| Ingredient[]
+			| Macros
+			| "breakfast"
+			| "lunch"
+			| "dinner"
+			| "snack"
+			| "brunch"
+			| string[]
+			| File
+			| null
+	) => {
 		setRecipe((prev) => ({ ...prev, [field]: value }));
 		setErrors((prev) => ({ ...prev, [field]: "" }));
 	};
@@ -88,6 +92,7 @@ export default function AdminRecipesPage() {
 			ingredients: [...prev.ingredients, { name: "", weight: 0 }],
 		}));
 	};
+
 
 	const updateIngredient = (
 		index: number,
@@ -128,23 +133,23 @@ export default function AdminRecipesPage() {
 		e.preventDefault();
 		if (!validateForm()) return;
 
-		setIsSubmitting(true);
+		//setIsSubmitting(true);
 		// Here you would typically send the data to your API
 		console.log(recipe);
 		await createRecipe(recipe);
-		setIsSubmitting(false);
-		setRecipe({
-			label: "",
-			image: "",
-			ingredients: [{ name: "", weight: 0 }],
-			calories: 0,
-			macros: { fat: 0, carbs: 0, protein: 0 },
-			mealType: "snack",
-			labels: [],
-			servings: 1,
-			prepTime: 0,
-			instructions: "",
-		});
+		// setIsSubmitting(false);
+		// setRecipe({
+		// 	label: "",
+		// 	image: null,
+		// 	ingredients: [{ name: "", weight: 0 }],
+		// 	calories: 0,
+		// 	macros: { fat: 0, carbs: 0, protein: 0 },
+		// 	mealType: "snack",
+		// 	labels: [],
+		// 	servings: 1,
+		// 	prepTime: 0,
+		// 	instructions: "",
+		// });
 	};
 
 	const filterSuggestions = (value: string) => {
@@ -218,14 +223,11 @@ export default function AdminRecipesPage() {
 
 						<div>
 							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-								Image URL
+								Image
 							</label>
 							<Input
-								placeholder="http://example.com/images/recipe.jpg"
-								value={recipe.image}
-								onChange={(e) =>
-									updateRecipe("image", e.target.value)
-								}
+								type="file"
+								onChange={(e) => updateRecipe("image", e.target.files ? e.target.files[0] : null)} // Handle file input change
 							/>
 							{errors.image && (
 								<p className="mt-1 text-sm text-red-600">

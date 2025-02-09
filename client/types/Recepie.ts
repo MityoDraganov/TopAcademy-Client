@@ -14,7 +14,7 @@ export interface Macros {
 
 export interface Recipe {
 	label: string;
-	image: string;
+	image: File | null;
 	ingredients: Ingredient[];
 	calories: number;
 	macros: Macros;
