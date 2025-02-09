@@ -3,13 +3,14 @@
 import type React from "react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { PersonalInfoCard } from "./components/PersonalInfoCard";
 import { DietaryPreferencesCard } from "./components/DietaryPrefrencesCard";
 import { HealthFitnessCard } from "./components/HealthFitnessCard";
 import { getUser } from "../api/requests/auth";
 import { useUser } from "@clerk/nextjs";
-import { UserRegisterFormDataModified, UserUpdateData } from "@/types/UserData";
+import { UserUpdateData } from "@/types/UserData";
 import { updateUser } from "../api/requests/auth";
+import { showSuccess } from "@/components/toast";
+
 
 const dietaryOptions: [string, string][] = [
   ["none", "No Preference"],
@@ -112,7 +113,10 @@ export default function Settings() {
       };
 
       const response = await updateUser(user.id, updateData);	
-      console.log(response);
+      // if the response is successful show a toast
+      if (response) {
+          showSuccess("Settings updated successfully!");
+      }
 
 
     } catch (error) {

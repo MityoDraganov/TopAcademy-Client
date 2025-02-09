@@ -8,6 +8,7 @@ export const useMealPlan = () => {
   const [isCooked, setIsCooked] = useState(false);
   const [isHighCarbDay, setIsHighCarbDay] = useState(true);
   const [calories, setCalories] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [highCarbDays, setHighCarbDays] = useState<MealOptions>({
     breakfast_options: [],
     lunch_options: [],
@@ -27,6 +28,7 @@ export const useMealPlan = () => {
 
   useEffect(() => {
     const fetchMealPlan = async () => {
+      setIsLoading(true);
       try {
         const response = await createWeeklyPlan() as WeeklyPlanResponse;
         if (!response) return;
@@ -50,6 +52,8 @@ export const useMealPlan = () => {
         });
       } catch (error) {
         console.error("Error fetching meal plan:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -95,5 +99,6 @@ export const useMealPlan = () => {
     highCarbDays,
     lowCardDays,
     handleMealAction,
+    isLoading,
   };
 };

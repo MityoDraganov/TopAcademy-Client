@@ -180,7 +180,8 @@ const MealCard: React.FC<MealCardProps> = ({
                 >
                   <div className="w-24">
                     <Input
-                      value={Math.round(ingredient.weight) + "g"}
+                      value={Math.round(ingredient.weight)}
+                      readOnly={true}
                       onChange={(e) =>
                         handleIngredientAmountChange(index, e.target.value)
                       }
