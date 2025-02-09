@@ -209,7 +209,6 @@ export default function AdminRecipesPage() {
                   <SelectItem value="lunch">Lunch</SelectItem>
                   <SelectItem value="dinner">Dinner</SelectItem>
                   <SelectItem value="snack">Snack</SelectItem>
-                  <SelectItem value="brunch">Brunch</SelectItem>
                 </SelectContent>
               </Select>
             </div>
