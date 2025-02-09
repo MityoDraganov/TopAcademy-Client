@@ -18,19 +18,11 @@ import {
 	CardTitle,
 	CardDescription,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Loader2, Plus, Trash2 } from "lucide-react";
-import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-} from "@/components/ui/command";
 import { Ingredient } from "@/types/Recepie";
 import IngridientInput from "./components/IngridientInput";
-import { createRecipe } from "@/app/api/requests/recipies";
+import { createRecipe, getIngredients } from "@/app/api/requests/recipies";
+import LabelsInput from "./components/LabelsInput";
 
 interface Macros {
 	fat: number;
@@ -51,19 +43,6 @@ interface Recipe {
 	instructions: string;
 }
 
-const existingIngridiens: Ingredient[] = [
-	{ name: "apple", weight: 100, id: 1 },
-	{ name: "banana", weight: 100, id: 2 },
-	{ name: "carrot", weight: 100, id: 3 },
-	{ name: "cheese", weight: 100, id: 4 },
-	{ name: "chocolate", weight: 100, id: 5 },
-	{ name: "milk", weight: 100, id: 6 },
-	{ name: "egg", weight: 100, id: 7 },
-	{ name: "flour", weight: 100, id: 8 },
-	{ name: "sugar", weight: 100, id: 9 },
-	{ name: "water", weight: 100, id: 10 },
-];
-
 export default function AdminRecipesPage() {
 	const [recipe, setRecipe] = useState<Recipe>({
 		label: "",
@@ -81,6 +60,15 @@ export default function AdminRecipesPage() {
 	const [errors, setErrors] = useState<Partial<Record<keyof Recipe, string>>>(
 		{}
 	);
+
+	const [ingridients, setIngridients] = useState<Ingredient[]>([]);
+
+	useEffect(() => {
+		(async () => {
+			const data = await getIngredients();
+			setIngridients(data);
+		})();
+	}, []);
 
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [suggestions, setSuggestions] = useState<Ingredient[]>([]);
@@ -125,8 +113,6 @@ export default function AdminRecipesPage() {
 			newErrors.ingredients = "At least one ingredient is required";
 		if (recipe.calories <= 0)
 			newErrors.calories = "Calories must be a positive number";
-		if (recipe.labels.length === 0)
-			newErrors.labels = "At least one label is required";
 		if (recipe.servings <= 0)
 			newErrors.servings = "Servings must be a positive number";
 		if (recipe.prepTime <= 0)
@@ -162,7 +148,7 @@ export default function AdminRecipesPage() {
 	};
 
 	const filterSuggestions = (value: string) => {
-		const filtered = existingIngridiens.filter((ingredient) =>
+		const filtered = ingridients.filter((ingredient) =>
 			ingredient.name.toLowerCase().includes(value.toLowerCase())
 		);
 		setSuggestions(filtered);
@@ -183,7 +169,6 @@ export default function AdminRecipesPage() {
 			setShowSuggestions(false);
 		}
 	};
-	
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -258,15 +243,23 @@ export default function AdminRecipesPage() {
 									key={index}
 									className="flex items-end gap-4 mt-2 relative"
 								>
-									<IngridientInput 
+									<IngridientInput
 										ingredient={ingredient}
 										index={index}
-										handleIngredientChange={handleIngredientChange}
-										setFocusedIngredientIndex={setFocusedIngredientIndex}
+										handleIngredientChange={
+											handleIngredientChange
+										}
+										setFocusedIngredientIndex={
+											setFocusedIngredientIndex
+										}
 										showSuggestions={showSuggestions}
-										focusedIngredientIndex={focusedIngredientIndex}
+										focusedIngredientIndex={
+											focusedIngredientIndex
+										}
 										suggestions={suggestions}
-										handleSuggestionClick={handleSuggestionClick}
+										handleSuggestionClick={
+											handleSuggestionClick
+										}
 										suggestionRefs={suggestionRefs}
 									/>
 									<div>
@@ -471,38 +464,15 @@ export default function AdminRecipesPage() {
 						</div>
 
 						<div>
-							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+							<label className="block text-sm font-medium mb-1">
 								Labels
 							</label>
-							<Textarea
-								placeholder="Enter labels separated by commas (e.g., healthy, fruit, quick)"
-								value={recipe.labels.join(", ")}
-								onChange={(
-									e: React.ChangeEvent<HTMLTextAreaElement>
-								) => {
-									const labels = e.target.value
-										.split(",")
-										.map((label: string) => label.trim())
-										.filter(Boolean);
-									updateRecipe("labels", labels);
-								}}
+							<LabelsInput
+								labels={recipe.labels}
+								setLabels={(labels) =>
+									updateRecipe("labels", labels)
+								}
 							/>
-							<div className="mt-2">
-								{recipe.labels.map((label, index) => (
-									<Badge
-										key={index}
-										variant="secondary"
-										className="mr-2 mb-2"
-									>
-										{label}
-									</Badge>
-								))}
-							</div>
-							{errors.labels && (
-								<p className="mt-1 text-sm text-red-600">
-									{errors.labels}
-								</p>
-							)}
 						</div>
 
 						<Button

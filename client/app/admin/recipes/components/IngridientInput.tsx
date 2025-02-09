@@ -9,7 +9,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Ingredient } from "@/types/Recepie";
 import { BadgeCheck } from "lucide-react";
-import { MutableRefObject } from "react";
 
 export default function IngridientInput({
 	ingredient,
@@ -32,7 +31,6 @@ export default function IngridientInput({
 	handleSuggestionClick: (suggestion: Ingredient) => void;
 	suggestionRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
 }) {
-	console.log(ingredient);
 	return (
 		<div className="flex-grow">
 			<div className="relative w-full">
