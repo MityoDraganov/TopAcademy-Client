@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { obtainToken } from "@/lib/clerkUtils";
 import { showError } from "@/components/toast";
 
-const API_BASE_URL = "http://78.47.222.81/api/v1";
+const API_BASE_URL = "https://78.47.222.81:80/api/v1";
 
 interface RequestOptions {
 	method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
