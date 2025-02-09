@@ -9,6 +9,8 @@ export interface Macros {
 	protein: number;
 }
 
+//type MealType = "breakfast" | "lunch" | "dinner" | "snack" | "brunch";
+
 export interface Recipe {
 	label: string;
 	image: string;
