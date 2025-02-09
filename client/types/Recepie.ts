@@ -1,6 +1,7 @@
 export interface Ingredient {
-	food: string;
+	name: string;
 	weight: number;
+	id?: number;
 }
 
 export interface Macros {

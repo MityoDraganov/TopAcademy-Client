@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,20 +14,61 @@ import {
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
+	CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Plus, Trash2 } from "lucide-react";
-import { Ingredient, Recipe } from "@/types/Recepie";
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from "@/components/ui/command";
+import { Ingredient } from "@/types/Recepie";
+import IngridientInput from "./components/IngridientInput";
 import { createRecipe } from "@/app/api/requests/recipies";
+
+interface Macros {
+	fat: number;
+	carbs: number;
+	protein: number;
+}
+
+interface Recipe {
+	label: string;
+	image: string;
+	ingredients: Ingredient[];
+	calories: number;
+	macros: Macros;
+	mealType: "breakfast" | "lunch" | "dinner" | "snack" | "brunch";
+	labels: string[];
+	servings: number;
+	prepTime: number; // in minutes
+	instructions: string;
+}
+
+const existingIngridiens: Ingredient[] = [
+	{ name: "apple", weight: 100, id: 1 },
+	{ name: "banana", weight: 100, id: 2 },
+	{ name: "carrot", weight: 100, id: 3 },
+	{ name: "cheese", weight: 100, id: 4 },
+	{ name: "chocolate", weight: 100, id: 5 },
+	{ name: "milk", weight: 100, id: 6 },
+	{ name: "egg", weight: 100, id: 7 },
+	{ name: "flour", weight: 100, id: 8 },
+	{ name: "sugar", weight: 100, id: 9 },
+	{ name: "water", weight: 100, id: 10 },
+];
 
 export default function AdminRecipesPage() {
 	const [recipe, setRecipe] = useState<Recipe>({
 		label: "",
 		image: "",
-		ingredients: [{ food: "", weight: 0 }],
+		ingredients: [{ name: "", weight: 0 }],
 		calories: 0,
 		macros: { fat: 0, carbs: 0, protein: 0 },
 		mealType: "snack",
@@ -41,6 +82,13 @@ export default function AdminRecipesPage() {
 		{}
 	);
 
+	const [showSuggestions, setShowSuggestions] = useState(false);
+	const [suggestions, setSuggestions] = useState<Ingredient[]>([]);
+	const [focusedIngredientIndex, setFocusedIngredientIndex] = useState<
+		number | null
+	>(null);
+	const suggestionRefs = useRef<(HTMLDivElement | null)[]>([]);
+
 	const updateRecipe = (field: keyof Recipe, value: any) => {
 		setRecipe((prev) => ({ ...prev, [field]: value }));
 		setErrors((prev) => ({ ...prev, [field]: "" }));
@@ -49,7 +97,7 @@ export default function AdminRecipesPage() {
 	const addIngredient = () => {
 		setRecipe((prev) => ({
 			...prev,
-			ingredients: [...prev.ingredients, { food: "", weight: 0 }],
+			ingredients: [...prev.ingredients, { name: "", weight: 0 }],
 		}));
 	};
 
@@ -92,33 +140,67 @@ export default function AdminRecipesPage() {
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		try {
-			if (!validateForm()) return;
+		if (!validateForm()) return;
 
-			setIsSubmitting(true);
-			// Here you would typically send the data to your API
-			console.log(recipe);
-			const response = await createRecipe(recipe);
-            console.log(response);
+		setIsSubmitting(true);
+		// Here you would typically send the data to your API
+		console.log(recipe);
+		await createRecipe(recipe);
+		setIsSubmitting(false);
+		setRecipe({
+			label: "",
+			image: "",
+			ingredients: [{ name: "", weight: 0 }],
+			calories: 0,
+			macros: { fat: 0, carbs: 0, protein: 0 },
+			mealType: "snack",
+			labels: [],
+			servings: 1,
+			prepTime: 0,
+			instructions: "",
+		});
+	};
 
-			setIsSubmitting(false);
-			setRecipe({
-				label: "",
-				image: "",
-				ingredients: [{ food: "", weight: 0 }],
-				calories: 0,
-				macros: { fat: 0, carbs: 0, protein: 0 },
-				mealType: "snack",
-				labels: [],
-				servings: 1,
-				prepTime: 0,
-				instructions: "",
-			});
-		} catch (e) {
-			console.log(e);
-			setIsSubmitting(false);
+	const filterSuggestions = (value: string) => {
+		const filtered = existingIngridiens.filter((ingredient) =>
+			ingredient.name.toLowerCase().includes(value.toLowerCase())
+		);
+		setSuggestions(filtered);
+		setShowSuggestions(filtered.length > 0);
+	};
+
+	const handleIngredientChange = (index: number, value: string) => {
+		updateIngredient(index, "name", value);
+		filterSuggestions(value);
+		setFocusedIngredientIndex(index);
+	};
+
+	const handleSuggestionClick = (suggestion: Ingredient) => {
+		if (focusedIngredientIndex !== null) {
+			const newIngredients = [...recipe.ingredients];
+			newIngredients[focusedIngredientIndex] = { ...suggestion }; // Update entire object
+			updateRecipe("ingredients", newIngredients);
+			setShowSuggestions(false);
 		}
 	};
+	
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				suggestionRefs.current.every(
+					(ref) => ref && !ref.contains(event.target as Node)
+				)
+			) {
+				setShowSuggestions(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
 
 	return (
 		<div className="h-screen pt-2 pb-10 overflow-y-auto">
@@ -174,21 +256,19 @@ export default function AdminRecipesPage() {
 							{recipe.ingredients.map((ingredient, index) => (
 								<div
 									key={index}
-									className="flex items-end gap-4 mt-2"
+									className="flex items-end gap-4 mt-2 relative"
 								>
-									<div className="flex-grow">
-										<Input
-											placeholder="Ingredient name"
-											value={ingredient.food}
-											onChange={(e) =>
-												updateIngredient(
-													index,
-													"food",
-													e.target.value
-												)
-											}
-										/>
-									</div>
+									<IngridientInput 
+										ingredient={ingredient}
+										index={index}
+										handleIngredientChange={handleIngredientChange}
+										setFocusedIngredientIndex={setFocusedIngredientIndex}
+										showSuggestions={showSuggestions}
+										focusedIngredientIndex={focusedIngredientIndex}
+										suggestions={suggestions}
+										handleSuggestionClick={handleSuggestionClick}
+										suggestionRefs={suggestionRefs}
+									/>
 									<div>
 										<Input
 											type="number"
