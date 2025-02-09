@@ -132,26 +132,53 @@ export default function AdminRecipesPage() {
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!validateForm()) return;
-
-		//setIsSubmitting(true);
-		// Here you would typically send the data to your API
-		console.log(recipe);
-		await createRecipe(recipe);
-		// setIsSubmitting(false);
-		// setRecipe({
-		// 	label: "",
-		// 	image: null,
-		// 	ingredients: [{ name: "", weight: 0 }],
-		// 	calories: 0,
-		// 	macros: { fat: 0, carbs: 0, protein: 0 },
-		// 	mealType: "snack",
-		// 	labels: [],
-		// 	servings: 1,
-		// 	prepTime: 0,
-		// 	instructions: "",
-		// });
-	};
-
+	  
+		setIsSubmitting(true);
+	  
+		try {
+		  // Send the recipe data to your API.
+		  // (Assuming createRecipe returns a success response or the created recipe.)
+		  await createRecipe(recipe);
+	  
+		  // After a successful creation, update the ingridients state.
+		  // This will merge any new ingredient from the submitted recipe
+		  // that is not already in the ingridients state.
+		  setIngridients((prevIngredients) => {
+			// For each ingredient in the recipe, check if it already exists in prevIngredients.
+			// Here, we're using the ingredient name as the unique key (adjust as needed).
+			const newIngredients = recipe.ingredients.filter(
+			  (recipeIng) =>
+				!prevIngredients.some(
+				  (existingIng) =>
+					existingIng.name.trim().toLowerCase() ===
+					recipeIng.name.trim().toLowerCase()
+				)
+			);
+			// Merge the previous ingredients with the new ones.
+			return [...prevIngredients, ...newIngredients];
+		  });
+	  
+		  // Optionally, clear the form by resetting the recipe state.
+		  setRecipe({
+			label: "",
+			image: null,
+			ingredients: [{ name: "", weight: 0 }],
+			calories: 0,
+			macros: { fat: 0, carbs: 0, protein: 0 },
+			mealType: "snack",
+			labels: [],
+			servings: 1,
+			prepTime: 0,
+			instructions: "",
+		  });
+		} catch (error) {
+		  // Handle any errors (for example, show a notification)
+		  console.error("Error creating recipe:", error);
+		} finally {
+		  setIsSubmitting(false);
+		}
+	  };
+	  
 	const filterSuggestions = (value: string) => {
 		const filtered = ingridients.filter((ingredient) =>
 			ingredient.name.toLowerCase().includes(value.toLowerCase())
